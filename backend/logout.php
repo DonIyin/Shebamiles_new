@@ -19,6 +19,6 @@ setcookie(SESSION_NAME, '', time() - 3600, '/');
 setcookie('remember_token', '', time() - 3600, '/');
 
 // Redirect to login page
-header('Location: ' . BASE_URL . 'index.html');
+header('Location: ' . BASE_URL . 'frontend/index.html');
 exit();
 ?>

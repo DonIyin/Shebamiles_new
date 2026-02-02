@@ -134,11 +134,11 @@ $stmt->execute();
 logActivity($user['user_id'], 'LOGIN', 'Successful login from ' . $ip_address);
 
 // Determine redirect based on role
-$redirect = BASE_URL . 'employee_personalized_dashboard.html';
+$redirect = BASE_URL . 'frontend/employee_personalized_dashboard.html';
 if ($user['role'] === 'admin') {
-    $redirect = BASE_URL . 'admin_dashboard_overview_orange.html';
+    $redirect = BASE_URL . 'frontend/admin_dashboard_overview_orange.html';
 } elseif ($user['role'] === 'manager') {
-    $redirect = BASE_URL . 'employee_directory_management.html';
+    $redirect = BASE_URL . 'frontend/employee_directory_orange.html';
 }
 
 http_response_code(200);

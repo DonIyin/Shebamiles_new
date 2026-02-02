@@ -35,5 +35,5 @@ $stmt->execute();
 // Log activity
 logActivity($user['user_id'], 'EMAIL_VERIFIED', 'Email address verified');
 
-echo "Email verified successfully! You can now <a href='../index.html'>login</a>";
+echo "Email verified successfully! You can now <a href='" . BASE_URL . "frontend/index.html'>login</a>";
 ?>

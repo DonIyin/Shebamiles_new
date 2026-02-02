@@ -145,7 +145,7 @@ if ($stmt->execute()) {
     echo json_encode([
         'success' => true,
         'message' => 'Registration successful! You are now logged in.',
-        'redirect' => BASE_URL . 'employee_personalized_dashboard.html'
+        'redirect' => BASE_URL . 'frontend/employee_personalized_dashboard.html'
     ]);
     
 } else {

@@ -65,7 +65,7 @@ function getCurrentUser() {
 // Function to redirect to login if not authenticated
 function requireLogin() {
     if (!isLoggedIn()) {
-        header('Location: ' . BASE_URL . 'index.html');
+        header('Location: ' . BASE_URL . 'frontend/index.html');
         exit();
     }
 }
