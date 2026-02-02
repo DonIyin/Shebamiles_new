@@ -21,14 +21,14 @@ if (!$input) {
     $input = $_POST;
 }
 
-$email = isset($input['email']) ? sanitize($input['email']) : '';
+$username = isset($input['username']) ? sanitize($input['username']) : '';
 $password = isset($input['password']) ? $input['password'] : '';
 $remember = isset($input['remember']) ? (bool)$input['remember'] : false;
 
 // Validation
-if (empty($email) || !isValidEmail($email)) {
+if (empty($username)) {
     http_response_code(400);
-    echo json_encode(['success' => false, 'message' => 'Please enter a valid email']);
+    echo json_encode(['success' => false, 'message' => 'Please enter your username']);
     exit();
 }
 
@@ -45,7 +45,7 @@ $query = "SELECT COUNT(*) as attempts FROM login_attempts
           WHERE email = ? AND attempt_time > DATE_SUB(NOW(), INTERVAL ? MINUTE)";
 $stmt = $conn->prepare($query);
 $lockout_minutes = LOCKOUT_TIME;
-$stmt->bind_param('si', $email, $lockout_minutes);
+$stmt->bind_param('si', $username, $lockout_minutes);
 $stmt->execute();
 $result = $stmt->get_result();
 $row = $result->fetch_assoc();
@@ -57,16 +57,16 @@ if ($row['attempts'] >= MAX_LOGIN_ATTEMPTS) {
     // Log failed attempt
     $query = "INSERT INTO login_attempts (email, ip_address, success) VALUES (?, ?, 0)";
     $stmt = $conn->prepare($query);
-    $stmt->bind_param('ss', $email, $ip_address);
+    $stmt->bind_param('ss', $username, $ip_address);
     $stmt->execute();
     
     exit();
 }
 
 // Find user
-$query = "SELECT user_id, email, password, first_name, last_name, role, status FROM users WHERE email = ?";
+$query = "SELECT user_id, email, username, password, first_name, last_name, role, status FROM users WHERE username = ?";
 $stmt = $conn->prepare($query);
-$stmt->bind_param('s', $email);
+$stmt->bind_param('s', $username);
 $stmt->execute();
 $result = $stmt->get_result();
 
@@ -74,11 +74,11 @@ if ($result->num_rows === 0) {
     // Log failed attempt
     $query = "INSERT INTO login_attempts (email, ip_address, success) VALUES (?, ?, 0)";
     $stmt = $conn->prepare($query);
-    $stmt->bind_param('ss', $email, $ip_address);
+    $stmt->bind_param('ss', $username, $ip_address);
     $stmt->execute();
     
     http_response_code(401);
-    echo json_encode(['success' => false, 'message' => 'Invalid email or password']);
+    echo json_encode(['success' => false, 'message' => 'Invalid username or password']);
     exit();
 }
 
@@ -96,17 +96,18 @@ if (!verifyPassword($password, $user['password'])) {
     // Log failed attempt
     $query = "INSERT INTO login_attempts (email, ip_address, success) VALUES (?, ?, 0)";
     $stmt = $conn->prepare($query);
-    $stmt->bind_param('ss', $email, $ip_address);
+    $stmt->bind_param('ss', $username, $ip_address);
     $stmt->execute();
     
     http_response_code(401);
-    echo json_encode(['success' => false, 'message' => 'Invalid email or password']);
+    echo json_encode(['success' => false, 'message' => 'Invalid username or password']);
     exit();
 }
 
 // Login successful - set session
 $_SESSION['user_id'] = $user['user_id'];
 $_SESSION['email'] = $user['email'];
+$_SESSION['username'] = $user['username'] ?? '';
 $_SESSION['name'] = $user['first_name'] . ' ' . $user['last_name'];
 $_SESSION['role'] = $user['role'];
 
@@ -147,6 +148,7 @@ echo json_encode([
     'message' => 'Login successful!',
     'user' => [
         'id' => $user['user_id'],
+        'username' => $user['username'] ?? '',
         'email' => $user['email'],
         'name' => $user['first_name'] . ' ' . $user['last_name'],
         'role' => $user['role']

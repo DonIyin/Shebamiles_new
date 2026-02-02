@@ -141,20 +141,20 @@
                     
                     <!-- Login Form -->
                     <form class="space-y-6" id="loginForm">
-                        <!-- Email Input -->
+                        <!-- Username Input -->
                         <div class="space-y-2">
-                            <label class="block text-sm font-semibold text-gray-700" for="email">
-                                Email Address
+                            <label class="block text-sm font-semibold text-gray-700" for="username">
+                                Username
                             </label>
                             <div class="relative">
                                 <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
-                                    email
+                                    person
                                 </span>
                                 <input 
                                     class="w-full pl-12 pr-4 py-3.5 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-0 transition-all input-glow" 
-                                    id="email"
-                                    type="email" 
-                                    placeholder="your.email@company.com"
+                                    id="username"
+                                    type="text" 
+                                    placeholder="your.username"
                                     required
                                 />
                             </div>
@@ -170,12 +170,15 @@
                                     lock
                                 </span>
                                 <input 
-                                    class="w-full pl-12 pr-4 py-3.5 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-0 transition-all input-glow" 
+                                    class="w-full pl-12 pr-12 py-3.5 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-0 transition-all input-glow" 
                                     id="password"
                                     type="password" 
                                     placeholder="Enter your password"
                                     required
                                 />
+                                <button type="button" class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-primary transition-colors" onclick="togglePassword('password', 'login-password-toggle')" aria-label="Show password">
+                                    <span id="login-password-toggle" class="material-symbols-outlined">visibility</span>
+                                </button>
                             </div>
                         </div>
                         
@@ -265,5 +268,15 @@
 
     <script src="index.js"></script>
     <script src="auth.js"></script>
+    <script>
+        function togglePassword(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            if (!input || !icon) return;
+            const isPassword = input.type === 'password';
+            input.type = isPassword ? 'text' : 'password';
+            icon.textContent = isPassword ? 'visibility_off' : 'visibility';
+        }
+    </script>
 </body>
 </html>

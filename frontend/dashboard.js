@@ -25,8 +25,9 @@ const DashboardInit = {
 
         const user = JSON.parse(userJson);
         
-        // Update welcome message
-        this.updateWelcomeMessage(user.name);
+        // Update welcome message - use username if available, otherwise use full name
+        const displayName = user.username ? user.username : user.name;
+        this.updateWelcomeMessage(displayName);
         
         // Update sidebar profile if exists
         this.updateProfileSection(user.name);

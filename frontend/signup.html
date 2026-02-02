@@ -102,7 +102,7 @@
                                     class="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-0 transition-all input-glow" 
                                     id="first-name"
                                     type="text" 
-                                    placeholder="John"
+                                    placeholder="Ademola"
                                     required
                                 />
                             </div>
@@ -117,7 +117,7 @@
                                     class="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-0 transition-all input-glow" 
                                     id="last-name"
                                     type="text" 
-                                    placeholder="Doe"
+                                    placeholder="Elegbede"
                                     required
                                 />
                             </div>
@@ -133,7 +133,22 @@
                                 class="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-0 transition-all input-glow" 
                                 id="signup-email"
                                 type="email" 
-                                placeholder="john.doe@company.com"
+                                placeholder="ademolaelegbede@shebamiles.com"
+                                required
+                            />
+                        </div>
+                    </div>
+                    
+                    <!-- Username -->
+                    <div class="space-y-2">
+                        <label class="block text-sm font-semibold text-gray-700">Username *</label>
+                        <div class="relative">
+                            <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">account_circle</span>
+                            <input 
+                                class="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-0 transition-all input-glow" 
+                                id="username"
+                                type="text" 
+                                placeholder="Ade"
                                 required
                             />
                         </div>
@@ -167,7 +182,7 @@
                                     class="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-0 transition-all input-glow" 
                                     id="phone"
                                     type="tel" 
-                                    placeholder="+1 (555) 123-4567"
+                                    placeholder="+234 806 373 2445"
                                 />
                             </div>
                         </div>
@@ -179,7 +194,7 @@
                         <div class="relative">
                             <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">lock</span>
                             <input 
-                                class="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-0 transition-all input-glow" 
+                                class="w-full pl-12 pr-12 py-3 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-0 transition-all input-glow" 
                                 id="signup-password"
                                 type="password" 
                                 placeholder="Min. 8 characters"
@@ -187,23 +202,30 @@
                                 onchange="validatePassword()"
                                 onkeyup="validatePassword()"
                             />
+                            <button type="button" class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-primary transition-colors" onclick="togglePassword('signup-password', 'signup-password-toggle')" aria-label="Show password">
+                                <span id="signup-password-toggle" class="material-symbols-outlined">visibility</span>
+                            </button>
                         </div>
                         <div class="password-strength" id="passwordStrength"></div>
-                        <p class="text-xs text-gray-600">At least 8 characters with uppercase, lowercase, number, and special character (!@#$%^&*)</p>
+                        <p class="text-xs text-gray-600">At least 8 characters with uppercase, lowercase, and number.</p>
+                        <p id="passwordWarning" class="text-xs text-red-500 hidden">Password must contain a capital letter, small letter, number, and be at least 8 characters.</p>
                     </div>
                     
                     <!-- Confirm Password -->
                     <div class="space-y-2">
                         <label class="block text-sm font-semibold text-gray-700">Confirm Password *</label>
                         <div class="relative">
-                            <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">lock_check</span>
+                            <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">lock</span>
                             <input 
-                                class="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-0 transition-all input-glow" 
+                                class="w-full pl-12 pr-12 py-3 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-0 transition-all input-glow" 
                                 id="confirm-password"
                                 type="password" 
                                 placeholder="Re-enter password"
                                 required
                             />
+                            <button type="button" class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-primary transition-colors" onclick="togglePassword('confirm-password', 'confirm-password-toggle')" aria-label="Show confirm password">
+                                <span id="confirm-password-toggle" class="material-symbols-outlined">visibility</span>
+                            </button>
                         </div>
                     </div>
                     
@@ -235,7 +257,7 @@
             
             <!-- Info Text -->
             <p class="text-center text-white text-sm mt-8 opacity-80">
-                © 2024 Shebamiles. All rights reserved.
+                © 2026 Shebamiles. All rights reserved.
             </p>
         </div>
     </div>
@@ -243,17 +265,33 @@
     <script src="index.js"></script>
     <script src="auth.js"></script>
     <script>
+        function togglePassword(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            if (!input || !icon) return;
+            const isPassword = input.type === 'password';
+            input.type = isPassword ? 'text' : 'password';
+            icon.textContent = isPassword ? 'visibility_off' : 'visibility';
+        }
+
         // Password strength validator
         function validatePassword() {
             const password = document.getElementById('signup-password').value;
             const strength = document.getElementById('passwordStrength');
+            const warning = document.getElementById('passwordWarning');
             
             let score = 0;
-            if (password.length >= 8) score++;
-            if (/[A-Z]/.test(password)) score++;
-            if (/[a-z]/.test(password)) score++;
-            if (/[0-9]/.test(password)) score++;
-            if (/[!@#$%^&*]/.test(password)) score++;
+            const hasLength = password.length >= 8;
+            const hasUpper = /[A-Z]/.test(password);
+            const hasLower = /[a-z]/.test(password);
+            const hasNumber = /[0-9]/.test(password);
+            const hasSpecial = /[!@#$%^&*]/.test(password);
+
+            if (hasLength) score++;
+            if (hasUpper) score++;
+            if (hasLower) score++;
+            if (hasNumber) score++;
+            if (hasSpecial) score++;
             
             strength.classList.remove('weak', 'medium', 'strong');
             
@@ -263,6 +301,11 @@
                 strength.classList.add('medium');
             } else {
                 strength.classList.add('strong');
+            }
+
+            const meetsPolicy = hasLength && hasUpper && hasLower && hasNumber;
+            if (warning) {
+                warning.classList.toggle('hidden', meetsPolicy || password.length === 0);
             }
         }
     </script>

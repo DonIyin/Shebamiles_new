@@ -36,12 +36,12 @@ const AuthModule = {
 
     // Handle login
     handleLogin: async function(form) {
-        const email = document.getElementById('email')?.value || '';
+        const username = document.getElementById('username')?.value || '';
         const password = document.getElementById('password')?.value || '';
         const remember = document.getElementById('remember')?.checked || false;
 
         // Validate
-        if (!email || !password) {
+        if (!username || !password) {
             this.showError('Please fill in all fields');
             return;
         }
@@ -59,7 +59,7 @@ const AuthModule = {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    email: email,
+                    username: username,
                     password: password,
                     remember: remember
                 })
@@ -96,11 +96,12 @@ const AuthModule = {
         const confirmPassword = document.getElementById('confirm-password')?.value || '';
         const firstName = document.getElementById('first-name')?.value || '';
         const lastName = document.getElementById('last-name')?.value || '';
+        const username = document.getElementById('username')?.value || '';
         const phone = document.getElementById('phone')?.value || '';
         const department = document.getElementById('department')?.value || '';
 
         // Validate
-        if (!email || !password || !confirmPassword || !firstName || !lastName) {
+        if (!email || !password || !confirmPassword || !firstName || !lastName || !username) {
             this.showError('Please fill in all required fields');
             return;
         }
@@ -128,6 +129,7 @@ const AuthModule = {
                     confirm_password: confirmPassword,
                     first_name: firstName,
                     last_name: lastName,
+                    username: username,
                     phone: phone,
                     department: department
                 })
@@ -136,16 +138,13 @@ const AuthModule = {
             const data = await response.json();
 
             if (data.success) {
-                // Store user data in localStorage
-                localStorage.setItem('shebamiles_user', JSON.stringify(data.user || {}));
-                
                 // Show success message
-                this.showSuccess('Account created successfully! Redirecting...');
+                this.showSuccess('Account created successfully! Redirecting to login...');
                 
-                // Redirect after short delay
+                // Redirect to login page after short delay
                 setTimeout(() => {
-                    window.location.href = data.redirect || 'employee_personalized_dashboard.html';
-                }, 1000);
+                    window.location.href = 'index.html';
+                }, 1500);
             } else if (data.errors) {
                 this.showErrors(data.errors);
             } else {
