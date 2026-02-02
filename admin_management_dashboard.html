@@ -8,9 +8,11 @@
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <!-- Google Fonts: Inter -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;800;900&amp;display=swap" rel="stylesheet"/>
 <!-- Material Symbols Outlined -->
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="index.css" rel="stylesheet"/>
 <script id="tailwind-config">
       tailwind.config = {
         darkMode: "class",
@@ -30,6 +32,16 @@
       }
     </script>
 <style>
+.shebamiles-logo {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 900;
+    font-size: 1.25rem;
+    background: linear-gradient(135deg, #f97316 0%, #fb923c 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.02em;
+}
       .material-symbols-outlined {
         font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
       }
@@ -43,13 +55,7 @@
 <!-- Sidebar Navigation -->
 <aside class="w-64 flex flex-col border-r border-[#e7dbcf] dark:border-[#3d2f21] bg-white dark:bg-[#2a1f14] h-full">
 <div class="p-6 flex items-center gap-3">
-<div class="size-8 bg-primary rounded-lg flex items-center justify-center text-white">
-<span class="material-symbols-outlined text-2xl">corporate_fare</span>
-</div>
-<div>
-<h1 class="text-[#1b140d] dark:text-white text-lg font-bold leading-tight"><a class="hover:opacity-90 transition-opacity" href="employee_personalized_dashboard.html">Shebamiles</a></h1>
-<p class="text-primary text-xs font-semibold uppercase tracking-wider">Management</p>
-</div>
+<a class="shebamiles-logo hover:opacity-80 transition-opacity" href="index.html">Shebamiles</a>
 </div>
 <nav class="flex-1 px-4 flex flex-col gap-2 mt-4">
 <div class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary">
@@ -105,13 +111,13 @@
 <!-- Dashboard Content -->
 <div class="p-8">
 <!-- Section Header -->
-<div class="mb-6">
+<div class="mb-6 animate-fade-in-up">
 <h2 class="text-2xl font-bold text-[#1b140d] dark:text-white">Admin Dashboard Overview</h2>
 <p class="text-[#9a734c] dark:text-[#b08d6d] text-sm">Manage your team and track daily operations at a glance.</p>
 </div>
 <!-- Stats Cards -->
 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-<div class="bg-white dark:bg-[#2a1f14] p-6 rounded-xl border border-[#e7dbcf] dark:border-[#3d2f21] flex flex-col gap-1 relative overflow-hidden group">
+<div class="bg-white dark:bg-[#2a1f14] p-6 rounded-xl border border-[#e7dbcf] dark:border-[#3d2f21] flex flex-col gap-1 relative overflow-hidden group hover-lift scroll-reveal">
 <div class="absolute right-0 top-0 size-16 bg-primary/5 rounded-bl-full flex items-center justify-center transition-all group-hover:bg-primary/10">
 <span class="material-symbols-outlined text-primary">groups</span>
 </div>

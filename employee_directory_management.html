@@ -7,7 +7,9 @@
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;800;900&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="index.css" rel="stylesheet"/>
 <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -27,6 +29,16 @@
         }
     </script>
 <style>
+.shebamiles-logo {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 900;
+    font-size: 1.25rem;
+    background: linear-gradient(135deg, #136dec 0%, #4a9eff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.02em;
+}
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
@@ -41,10 +53,7 @@
 <div class="flex items-center justify-between mx-auto max-w-[1280px]">
 <div class="flex items-center gap-8">
 <div class="flex items-center gap-3">
-<div class="bg-primary p-1.5 rounded-lg text-white">
-<span class="material-symbols-outlined block">corporate_fare</span>
-</div>
-<h2 class="text-xl font-bold tracking-tight"><a class="hover:opacity-90 transition-opacity" href="employee_personalized_dashboard.html">Shebamiles</a></h2>
+<a class="shebamiles-logo hover:opacity-80 transition-opacity" href="index.html">Shebamiles</a>
 </div>
 <div class="hidden md:flex items-center gap-6">
 <a class="text-slate-600 dark:text-slate-400 text-sm font-medium hover:text-primary transition-colors" href="admin_dashboard_overview.html">Dashboard</a>
@@ -77,12 +86,12 @@
 <span class="text-slate-900 dark:text-slate-200">Employee Directory</span>
 </nav>
 <!-- Page Heading -->
-<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8 animate-fade-in-up">
 <div>
 <h1 class="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">Employee Management</h1>
 <p class="text-slate-500 dark:text-slate-400 mt-1">View, manage, and onboard your company workforce.</p>
 </div>
-<button class="flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white px-5 py-2.5 rounded-lg font-bold text-sm transition-all shadow-lg shadow-primary/20">
+<button class="flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white px-5 py-2.5 rounded-lg font-bold text-sm transition-all shadow-lg shadow-primary/20 ripple hover-scale">
 <span class="material-symbols-outlined text-lg">person_add</span>
                 Add New Employee
             </button>
@@ -91,7 +100,7 @@
 <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm">
 <div class="p-4 border-b border-slate-100 dark:border-slate-800 flex flex-wrap items-center justify-between gap-4">
 <div class="flex items-center gap-2">
-<button class="px-4 py-2 text-sm font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-200 flex items-center gap-2 transition-colors">
+<button class="px-4 py-2 text-sm font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-200 flex items-center gap-2 transition-colors ripple hover-scale">
 <span class="material-symbols-outlined text-lg">filter_list</span>
                         Filters
                     </button>
@@ -99,10 +108,10 @@
 <p class="text-sm text-slate-500 font-medium hidden sm:inline">248 Total Records</p>
 </div>
 <div class="flex items-center gap-2">
-<button class="p-2 text-slate-500 hover:text-primary transition-colors">
+<button class="p-2 text-slate-500 hover:text-primary transition-colors ripple hover-scale">
 <span class="material-symbols-outlined">download</span>
 </button>
-<button class="p-2 text-slate-500 hover:text-primary transition-colors">
+<button class="p-2 text-slate-500 hover:text-primary transition-colors ripple hover-scale">
 <span class="material-symbols-outlined">print</span>
 </button>
 </div>

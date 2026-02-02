@@ -6,6 +6,7 @@
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="index.css" rel="stylesheet"/>
 <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -33,15 +34,23 @@
         :root {
             --primary-color: #f97316;
         }
+        .shebamiles-logo {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 900;
+            font-size: 1.25rem;
+            background: linear-gradient(135deg, #f97316 0%, #fb923c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.02em;
+        }
     </style>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;800;900&amp;display=swap" rel="stylesheet"/>
 </head>
 <body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex">
 <aside class="w-64 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-col sticky top-0 h-screen shrink-0">
-<div class="p-6 border-b border-slate-200 dark:border-slate-800 flex items-center gap-3">
-<div class="size-8 bg-primary rounded-lg flex items-center justify-center text-white">
-<span class="material-symbols-outlined">corporate_fare</span>
-</div>
-<h2 class="text-lg font-bold tracking-tight"><a class="hover:opacity-90 transition-opacity" href="employee_personalized_dashboard.html">Shebamiles</a></h2>
+<div class="p-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-center">
+<a class="shebamiles-logo hover:opacity-80 transition-opacity" href="index.html">Shebamiles</a>
 </div>
 <nav class="flex-1 px-4 py-6 flex flex-col gap-2">
 <div class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/10 text-primary">
@@ -86,18 +95,18 @@
 <div class="flex items-center gap-4 flex-1 max-w-xl">
 <div class="relative w-full">
 <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xl">search</span>
-<input class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-lg pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-primary/20 placeholder:text-slate-400" placeholder="Search employees, reports, or records..." type="text"/>
+<input class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-lg pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-primary/20 placeholder:text-slate-400 transition-all" placeholder="Search employees, reports, or records..." type="text" data-search=".employee-row"/>
 </div>
 </div>
 <div class="flex items-center gap-4">
-<button class="size-10 flex items-center justify-center rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-primary transition-colors">
+<button class="size-10 flex items-center justify-center rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-primary transition-colors ripple hover-scale">
 <span class="material-symbols-outlined">notifications</span>
 </button>
-<button class="size-10 flex items-center justify-center rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-primary transition-colors">
+<button class="size-10 flex items-center justify-center rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-primary transition-colors ripple hover-scale">
 <span class="material-symbols-outlined">help</span>
 </button>
 <div class="h-8 w-px bg-slate-200 dark:bg-slate-700 mx-2"></div>
-<button class="px-4 py-2 bg-primary text-white text-sm font-bold rounded-lg hover:bg-primary-dark transition-all flex items-center gap-2">
+<button class="px-4 py-2 bg-primary text-white text-sm font-bold rounded-lg hover:bg-primary-dark transition-all flex items-center gap-2 ripple hover-scale">
 <span class="material-symbols-outlined text-sm">add</span>
                 New Hire
             </button>
@@ -105,7 +114,7 @@
 </header>
 <div class="p-8 max-w-[1200px] mx-auto w-full">
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 rounded-xl shadow-sm">
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 rounded-xl shadow-sm hover-lift scroll-reveal">
 <div class="flex items-center justify-between mb-2">
 <p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Total Employees</p>
 <span class="material-symbols-outlined text-primary">groups</span>
@@ -116,7 +125,7 @@
 <span class="text-slate-400 text-xs">vs last month</span>
 </div>
 </div>
-<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 rounded-xl shadow-sm">
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 rounded-xl shadow-sm hover-lift scroll-reveal delay-100">
 <div class="flex items-center justify-between mb-2">
 <p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Present Today</p>
 <span class="material-symbols-outlined text-emerald-500">check_circle</span>
@@ -127,7 +136,7 @@
 </div>
 <p class="text-xs text-slate-400 mt-2">88.8% attendance rate</p>
 </div>
-<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 rounded-xl shadow-sm">
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 rounded-xl shadow-sm hover-lift scroll-reveal delay-200">
 <div class="flex items-center justify-between mb-2">
 <p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Absent</p>
 <span class="material-symbols-outlined text-rose-500">person_off</span>
@@ -135,7 +144,7 @@
 <p class="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">138</p>
 <p class="text-xs text-rose-500 mt-3 font-medium">12 pending leave approvals</p>
 </div>
-<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 rounded-xl shadow-sm">
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 rounded-xl shadow-sm hover-lift scroll-reveal delay-300">
 <div class="flex items-center justify-between mb-2">
 <p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Avg Performance</p>
 <span class="material-symbols-outlined text-amber-500">star</span>

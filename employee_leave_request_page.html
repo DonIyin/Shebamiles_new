@@ -7,7 +7,9 @@
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;800;900&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="index.css" rel="stylesheet"/>
 <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -32,6 +34,16 @@
         }
     </script>
 <style>
+.shebamiles-logo {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 900;
+    font-size: 1.25rem;
+    background: linear-gradient(135deg, #f97316 0%, #fb923c 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.02em;
+}
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
@@ -46,10 +58,7 @@
 <aside class="w-64 border-r border-[#e7dbcf] dark:border-[#3d2e20] bg-white dark:bg-[#2c2116] flex flex-col justify-between p-4 sticky top-0 h-screen">
 <div class="flex flex-col gap-8">
 <div class="flex flex-col px-3">
-<h1 class="text-primary text-xl font-black leading-normal flex items-center gap-2">
-<span class="material-symbols-outlined text-2xl">corporate_fare</span>
-<a class="hover:opacity-90 transition-opacity" href="employee_personalized_dashboard.html">Shebamiles</a>
-                    </h1>
+<a class="shebamiles-logo hover:opacity-80 transition-opacity" href="index.html">Shebamiles</a>
 <p class="text-[#9a734c] text-xs font-normal leading-normal">Employee Dashboard</p>
 </div>
 <nav class="flex flex-col gap-2">
@@ -132,8 +141,8 @@
 <textarea class="form-input w-full rounded-lg border-[#e7dbcf] dark:border-[#3d2e20] bg-background-light dark:bg-[#221910] text-sm focus:ring-primary focus:border-primary" placeholder="Briefly explain the reason for your leave request..." rows="4"></textarea>
 </label>
 <div class="flex justify-end gap-3">
-<button class="px-6 py-2.5 rounded-lg border border-[#e7dbcf] dark:border-[#3d2e20] text-sm font-bold hover:bg-[#f3ede7] dark:hover:bg-[#3d2e20] transition-colors" type="button">Cancel</button>
-<button class="px-8 py-2.5 rounded-lg bg-primary text-white text-sm font-bold shadow-md hover:bg-primary/90 transition-colors" type="submit">Submit Request</button>
+<button class="px-6 py-2.5 rounded-lg border border-[#e7dbcf] dark:border-[#3d2e20] text-sm font-bold hover:bg-[#f3ede7] dark:hover:bg-[#3d2e20] transition-colors ripple" type="button">Cancel</button>
+<button class="px-8 py-2.5 rounded-lg bg-primary text-white text-sm font-bold shadow-md hover:bg-primary/90 transition-colors ripple btn-primary" type="submit">Submit Request</button>
 </div>
 </form>
 </section>

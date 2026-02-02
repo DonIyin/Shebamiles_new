@@ -6,6 +6,8 @@
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="index.css" rel="stylesheet"/>
 <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -26,6 +28,16 @@
         }
     </script>
 <style type="text/tailwindcss">
+.shebamiles-logo {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 900;
+    font-size: 1.25rem;
+    background: linear-gradient(135deg, #f97316 0%, #fb923c 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.02em;
+}
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
@@ -42,10 +54,7 @@
 <div class="flex items-center justify-between mx-auto max-w-[1280px]">
 <div class="flex items-center gap-8">
 <div class="flex items-center gap-3">
-<div class="bg-primary p-1.5 rounded-lg text-white">
-<span class="material-symbols-outlined block">corporate_fare</span>
-</div>
-<h2 class="text-xl font-bold tracking-tight"><a class="hover:opacity-90 transition-opacity" href="employee_personalized_dashboard.html">Shebamiles</a></h2>
+<a class="shebamiles-logo hover:opacity-80 transition-opacity" href="index.html">Shebamiles</a>
 </div>
 <div class="hidden md:flex items-center gap-6">
 <a class="text-slate-600 dark:text-slate-400 text-sm font-medium hover:text-primary transition-colors" href="admin_dashboard_overview_orange.html">Dashboard</a>
@@ -81,7 +90,7 @@
 <h1 class="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">Employee Management</h1>
 <p class="text-slate-500 dark:text-slate-400 mt-1">View, manage, and onboard your company workforce.</p>
 </div>
-<button class="flex items-center justify-center gap-2 bg-primary hover:bg-primary-hover text-white px-5 py-2.5 rounded-lg font-bold text-sm transition-all shadow-lg shadow-primary/20">
+<button class="flex items-center justify-center gap-2 bg-primary hover:bg-primary-dark text-white px-5 py-2.5 rounded-lg font-bold text-sm transition-all shadow-lg shadow-primary/20 ripple hover-scale">
 <span class="material-symbols-outlined text-lg">person_add</span>
             Add New Employee
         </button>
@@ -317,4 +326,5 @@
 </div>
 </div>
 
+<script src="index.js"></script>
 </body></html>
