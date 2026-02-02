@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Employee Leave Request Page</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec7f13",
+                        "background-light": "#f8f7f6",
+                        "background-dark": "#221910",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-[#1b140d] dark:text-white">
+<div class="flex min-h-screen w-full">
+<!-- Sidebar Navigation -->
+<aside class="w-64 border-r border-[#e7dbcf] dark:border-[#3d2e20] bg-white dark:bg-[#2c2116] flex flex-col justify-between p-4 sticky top-0 h-screen">
+<div class="flex flex-col gap-8">
+<div class="flex flex-col px-3">
+<h1 class="text-primary text-xl font-black leading-normal flex items-center gap-2">
+<span class="material-symbols-outlined text-2xl">corporate_fare</span>
+                        EMS Portal
+                    </h1>
+<p class="text-[#9a734c] text-xs font-normal leading-normal">Employee Dashboard</p>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#f3ede7] dark:hover:bg-[#3d2e20] transition-colors group" href="#">
+<span class="material-symbols-outlined text-[#1b140d] dark:text-white group-hover:text-primary">dashboard</span>
+<p class="text-sm font-medium">Dashboard</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/10 text-primary" href="#">
+<span class="material-symbols-outlined fill">event_busy</span>
+<p class="text-sm font-bold">Leave Requests</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#f3ede7] dark:hover:bg-[#3d2e20] transition-colors group" href="#">
+<span class="material-symbols-outlined text-[#1b140d] dark:text-white group-hover:text-primary">payments</span>
+<p class="text-sm font-medium">Payroll</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#f3ede7] dark:hover:bg-[#3d2e20] transition-colors group" href="#">
+<span class="material-symbols-outlined text-[#1b140d] dark:text-white group-hover:text-primary">person</span>
+<p class="text-sm font-medium">Profile</p>
+</a>
+</nav>
+</div>
+<div class="flex items-center gap-3 px-3 py-4 border-t border-[#e7dbcf] dark:border-[#3d2e20]">
+<div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold">JS</div>
+<div class="flex flex-col">
+<p class="text-sm font-bold">John Smith</p>
+<p class="text-xs text-[#9a734c]">UX Designer</p>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 overflow-y-auto px-8 py-6">
+<!-- Breadcrumbs -->
+<div class="flex items-center gap-2 mb-4 text-sm font-medium">
+<a class="text-[#9a734c] hover:text-primary transition-colors" href="#">Home</a>
+<span class="text-[#9a734c]">/</span>
+<span class="text-[#1b140d] dark:text-white">Leave Requests</span>
+</div>
+<!-- Page Heading -->
+<div class="mb-8">
+<h1 class="text-4xl font-black leading-tight tracking-tight text-[#1b140d] dark:text-white">Leave Requests</h1>
+<p class="text-[#9a734c] text-base font-normal">Manage your time off and view real-time balances.</p>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Request Form Area -->
+<div class="lg:col-span-2 space-y-8">
+<section class="bg-white dark:bg-[#2c2116] rounded-xl border border-[#e7dbcf] dark:border-[#3d2e20] shadow-sm overflow-hidden">
+<div class="border-b border-[#e7dbcf] dark:border-[#3d2e20] px-6 py-4">
+<h2 class="text-lg font-bold">Request New Leave</h2>
+</div>
+<form class="p-6 space-y-6">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<label class="flex flex-col gap-2">
+<span class="text-sm font-semibold">Leave Type</span>
+<select class="form-input w-full rounded-lg border-[#e7dbcf] dark:border-[#3d2e20] bg-background-light dark:bg-[#221910] text-sm focus:ring-primary focus:border-primary">
+<option value="">Select type...</option>
+<option value="annual">Annual Leave</option>
+<option value="sick">Sick Leave</option>
+<option value="personal">Personal Leave</option>
+<option value="parental">Maternity/Paternity</option>
+</select>
+</label>
+<div class="flex flex-col gap-2">
+<span class="text-sm font-semibold text-transparent">Placeholder</span>
+<div class="flex items-center gap-2 text-xs text-primary bg-primary/10 px-3 py-2 rounded-lg">
+<span class="material-symbols-outlined text-sm">info</span>
+                                        Check balance before applying
+                                    </div>
+</div>
+<label class="flex flex-col gap-2">
+<span class="text-sm font-semibold">Start Date</span>
+<input class="form-input w-full rounded-lg border-[#e7dbcf] dark:border-[#3d2e20] bg-background-light dark:bg-[#221910] text-sm focus:ring-primary focus:border-primary" type="date"/>
+</label>
+<label class="flex flex-col gap-2">
+<span class="text-sm font-semibold">End Date</span>
+<input class="form-input w-full rounded-lg border-[#e7dbcf] dark:border-[#3d2e20] bg-background-light dark:bg-[#221910] text-sm focus:ring-primary focus:border-primary" type="date"/>
+</label>
+</div>
+<label class="flex flex-col gap-2">
+<span class="text-sm font-semibold">Reason / Notes</span>
+<textarea class="form-input w-full rounded-lg border-[#e7dbcf] dark:border-[#3d2e20] bg-background-light dark:bg-[#221910] text-sm focus:ring-primary focus:border-primary" placeholder="Briefly explain the reason for your leave request..." rows="4"></textarea>
+</label>
+<div class="flex justify-end gap-3">
+<button class="px-6 py-2.5 rounded-lg border border-[#e7dbcf] dark:border-[#3d2e20] text-sm font-bold hover:bg-[#f3ede7] dark:hover:bg-[#3d2e20] transition-colors" type="button">Cancel</button>
+<button class="px-8 py-2.5 rounded-lg bg-primary text-white text-sm font-bold shadow-md hover:bg-primary/90 transition-colors" type="submit">Submit Request</button>
+</div>
+</form>
+</section>
+<!-- Request History -->
+<section class="bg-white dark:bg-[#2c2116] rounded-xl border border-[#e7dbcf] dark:border-[#3d2e20] shadow-sm overflow-hidden">
+<div class="border-b border-[#e7dbcf] dark:border-[#3d2e20] px-6 py-4 flex justify-between items-center">
+<h2 class="text-lg font-bold">Request History</h2>
+<button class="text-primary text-sm font-bold hover:underline">View All</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-background-light dark:bg-[#221910] text-[#9a734c] text-xs uppercase tracking-wider">
+<tr>
+<th class="px-6 py-4">Leave Type</th>
+<th class="px-6 py-4">Duration</th>
+<th class="px-6 py-4 text-center">Days</th>
+<th class="px-6 py-4">Status</th>
+<th class="px-6 py-4"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-[#e7dbcf] dark:divide-[#3d2e20]">
+<tr class="hover:bg-background-light/50 dark:hover:bg-[#221910]/50 transition-colors">
+<td class="px-6 py-4">
+<p class="font-bold text-sm">Annual Leave</p>
+<p class="text-xs text-[#9a734c]">Requested on Oct 12</p>
+</td>
+<td class="px-6 py-4 text-sm font-medium">Dec 15 - Dec 20, 2023</td>
+<td class="px-6 py-4 text-center text-sm">5</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-500">
+<span class="w-1.5 h-1.5 rounded-full bg-yellow-500 mr-2"></span>
+                                                Pending
+                                            </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-[#9a734c] hover:text-primary"><span class="material-symbols-outlined text-xl">more_vert</span></button>
+</td>
+</tr>
+<tr class="hover:bg-background-light/50 dark:hover:bg-[#221910]/50 transition-colors">
+<td class="px-6 py-4">
+<p class="font-bold text-sm">Sick Leave</p>
+<p class="text-xs text-[#9a734c]">Requested on Sep 04</p>
+</td>
+<td class="px-6 py-4 text-sm font-medium">Sep 05 - Sep 06, 2023</td>
+<td class="px-6 py-4 text-center text-sm">2</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-500">
+<span class="w-1.5 h-1.5 rounded-full bg-green-500 mr-2"></span>
+                                                Approved
+                                            </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-[#9a734c] hover:text-primary"><span class="material-symbols-outlined text-xl">more_vert</span></button>
+</td>
+</tr>
+<tr class="hover:bg-background-light/50 dark:hover:bg-[#221910]/50 transition-colors">
+<td class="px-6 py-4">
+<p class="font-bold text-sm">Personal Leave</p>
+<p class="text-xs text-[#9a734c]">Requested on Aug 20</p>
+</td>
+<td class="px-6 py-4 text-sm font-medium">Aug 25, 2023</td>
+<td class="px-6 py-4 text-center text-sm">1</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-500">
+<span class="w-1.5 h-1.5 rounded-full bg-red-500 mr-2"></span>
+                                                Declined
+                                            </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-[#9a734c] hover:text-primary"><span class="material-symbols-outlined text-xl">more_vert</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</div>
+<!-- Leave Balance Column -->
+<div class="space-y-6">
+<section class="bg-white dark:bg-[#2c2116] rounded-xl border border-[#e7dbcf] dark:border-[#3d2e20] shadow-sm p-6">
+<div class="mb-6">
+<h2 class="text-lg font-bold">Leave Balances</h2>
+<p class="text-xs text-[#9a734c]">Available days for 2023 cycle</p>
+</div>
+<div class="grid grid-cols-2 gap-6">
+<!-- Circular Progress Item -->
+<div class="flex flex-col items-center gap-3">
+<div class="relative w-20 h-20">
+<svg class="w-full h-full transform -rotate-90">
+<circle class="text-[#f3ede7] dark:text-[#3d2e20]" cx="40" cy="40" fill="transparent" r="34" stroke="currentColor" stroke-width="6"></circle>
+<circle class="text-primary" cx="40" cy="40" fill="transparent" r="34" stroke="currentColor" stroke-dasharray="213.6" stroke-dashoffset="42.7" stroke-width="6"></circle>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="text-lg font-black italic">12</span>
+</div>
+</div>
+<div class="text-center">
+<p class="text-xs font-bold uppercase tracking-tight">Annual</p>
+<p class="text-[10px] text-[#9a734c]">/ 15 days</p>
+</div>
+</div>
+<div class="flex flex-col items-center gap-3">
+<div class="relative w-20 h-20">
+<svg class="w-full h-full transform -rotate-90">
+<circle class="text-[#f3ede7] dark:text-[#3d2e20]" cx="40" cy="40" fill="transparent" r="34" stroke="currentColor" stroke-width="6"></circle>
+<circle class="text-primary" cx="40" cy="40" fill="transparent" r="34" stroke="currentColor" stroke-dasharray="213.6" stroke-dashoffset="106.8" stroke-width="6"></circle>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="text-lg font-black italic">5</span>
+</div>
+</div>
+<div class="text-center">
+<p class="text-xs font-bold uppercase tracking-tight">Sick</p>
+<p class="text-[10px] text-[#9a734c]">/ 10 days</p>
+</div>
+</div>
+<div class="flex flex-col items-center gap-3">
+<div class="relative w-20 h-20">
+<svg class="w-full h-full transform -rotate-90">
+<circle class="text-[#f3ede7] dark:text-[#3d2e20]" cx="40" cy="40" fill="transparent" r="34" stroke="currentColor" stroke-width="6"></circle>
+<circle class="text-primary" cx="40" cy="40" fill="transparent" r="34" stroke="currentColor" stroke-dasharray="213.6" stroke-dashoffset="149.5" stroke-width="6"></circle>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="text-lg font-black italic">3</span>
+</div>
+</div>
+<div class="text-center">
+<p class="text-xs font-bold uppercase tracking-tight">Personal</p>
+<p class="text-[10px] text-[#9a734c]">/ 10 days</p>
+</div>
+</div>
+<div class="flex flex-col items-center gap-3">
+<div class="relative w-20 h-20">
+<svg class="w-full h-full transform -rotate-90">
+<circle class="text-[#f3ede7] dark:text-[#3d2e20]" cx="40" cy="40" fill="transparent" r="34" stroke="currentColor" stroke-width="6"></circle>
+<circle class="text-primary" cx="40" cy="40" fill="transparent" r="34" stroke="currentColor" stroke-dasharray="213.6" stroke-dashoffset="213.6" stroke-width="6"></circle>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="text-lg font-black italic">0</span>
+</div>
+</div>
+<div class="text-center">
+<p class="text-xs font-bold uppercase tracking-tight">Parental</p>
+<p class="text-[10px] text-[#9a734c]">/ 90 days</p>
+</div>
+</div>
+</div>
+</section>
+<div class="bg-primary/10 rounded-xl border border-primary/20 p-6 flex flex-col gap-4">
+<div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-white">
+<span class="material-symbols-outlined">lightbulb</span>
+</div>
+<div>
+<p class="text-sm font-bold text-primary">Need Help?</p>
+<p class="text-xs text-[#9a734c] mt-1">Read the company policy on leave procedures or contact your HR manager.</p>
+</div>
+<a class="text-xs font-bold text-primary flex items-center gap-1 hover:underline" href="#">
+                            View Policy Documents
+                            <span class="material-symbols-outlined text-[14px]">arrow_outward</span>
+</a>
+</div>
+<div class="relative rounded-xl overflow-hidden h-40 group shadow-md">
+<img alt="Modern office workspace" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Blurred modern office background for visual aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBn6fbturiNxJ5SZZolGnumREg2oAHOxruLRbzaD0oZdLjBlCd32pJPQftwZUk09Krz_bWz7nY_mseOjZcRdMWgeZDQC_MLSrNrrcpKuqlwC14XqplRe4jGivs5wLVQCMRr__COzOisesoCLXQEfoB_Gs_JKavYkti46CFemRhUHqns0jtdMOE_ospx4QFPRghgFofeLe8yf2PNE_V7emZQJPnEWn1EBtvAzj2a-HTlSesAu5CWu8aFOdv51cDfAss9JCCijYRouiy1"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4">
+<p class="text-white text-xs font-medium">Plan your vacations ahead of time!</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>
