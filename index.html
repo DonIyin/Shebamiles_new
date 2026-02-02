@@ -140,7 +140,7 @@
                     </div>
                     
                     <!-- Login Form -->
-                    <form class="space-y-6" data-validate>
+                    <form class="space-y-6" id="loginForm">
                         <!-- Email Input -->
                         <div class="space-y-2">
                             <label class="block text-sm font-semibold text-gray-700" for="email">
@@ -182,7 +182,7 @@
                         <!-- Remember & Forgot -->
                         <div class="flex items-center justify-between">
                             <label class="flex items-center gap-2 cursor-pointer">
-                                <input type="checkbox" class="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary">
+                                <input id="remember" type="checkbox" class="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary">
                                 <span class="text-sm text-gray-600">Remember me</span>
                             </label>
                             <a href="#" class="text-sm font-semibold text-primary hover:text-primary-dark transition-colors">
@@ -231,7 +231,7 @@
                         <!-- Sign Up Link -->
                         <p class="text-center text-sm text-gray-600">
                             Don't have an account? 
-                            <a href="#" class="font-bold text-primary hover:text-primary-dark transition-colors">
+                            <a href="#" class="font-bold text-primary hover:text-primary-dark transition-colors" onclick="window.location.href='signup.html'">
                                 Sign up now
                             </a>
                         </p>
@@ -264,5 +264,6 @@
     </div>
 
     <script src="index.js"></script>
+    <script src="auth.js"></script>
 </body>
 </html>

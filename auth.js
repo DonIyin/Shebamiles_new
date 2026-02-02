@@ -53,7 +53,7 @@ const AuthModule = {
         submitBtn.disabled = true;
 
         try {
-            const response = await fetch('login.php', {
+            const response = await fetch('backend/login.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -117,7 +117,7 @@ const AuthModule = {
         submitBtn.disabled = true;
 
         try {
-            const response = await fetch('register.php', {
+            const response = await fetch('backend/register.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -187,7 +187,7 @@ const AuthModule = {
     // Logout
     logout: function() {
         localStorage.removeItem('shebamiles_user');
-        window.location.href = 'logout.php';
+        window.location.href = 'backend/logout.php';
     },
 
     // Get current user
