@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Directory - Shebamiles</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;800;900&display=swap" rel="stylesheet">
+    <link href="index.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f97316",
+                        "primary-dark": "#ea580c",
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .shebamiles-logo {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 900;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, #f97316 0%, #fb923c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.02em;
+        }
+        
+        .employee-card {
+            transition: all 0.3s ease;
+        }
+        
+        .employee-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(249, 115, 22, 0.15);
+        }
+        
+        .skeleton {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 font-['Inter']">
+    
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col">
+            <div class="p-6">
+                <a href="admin_dashboard_overview.html" class="shebamiles-logo">Shebamiles</a>
+            </div>
+            
+            <nav class="flex-1 px-4 space-y-2">
+                <a href="admin_dashboard_overview.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <span class="material-symbols-outlined">dashboard</span>
+                    <span class="font-medium">Dashboard</span>
+                </a>
+                
+                <a href="employee_list.html" class="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary/10 text-primary transition-colors">
+                    <span class="material-symbols-outlined">groups</span>
+                    <span class="font-semibold">Employee Directory</span>
+                </a>
+                
+                <a href="attendance_tracking_calendar.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <span class="material-symbols-outlined">event_available</span>
+                    <span class="font-medium">Attendance</span>
+                </a>
+                
+                <a href="performance_awards_analytics_hub.html" class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <span class="material-symbols-outlined">trending_up</span>
+                    <span class="font-medium">Performance</span>
+                </a>
+            </nav>
+            
+            <div class="p-4 border-t border-gray-200 dark:border-gray-700">
+                <button onclick="AuthModule.logout()" class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 transition-colors w-full">
+                    <span class="material-symbols-outlined">logout</span>
+                    <span class="font-medium">Logout</span>
+                </button>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col overflow-hidden">
+            <!-- Header -->
+            <header class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-8 py-4 flex items-center justify-between">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Employee Directory</h1>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Manage and view all employees</p>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                    <button onclick="toggleView()" class="p-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <span id="viewToggleIcon" class="material-symbols-outlined">grid_view</span>
+                    </button>
+                    
+                    <div class="h-8 w-px bg-gray-200 dark:bg-gray-700"></div>
+                    
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-orange-500 flex items-center justify-center text-white font-bold">
+                            <span data-welcome-name></span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Filters & Search -->
+            <div class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-8 py-4">
+                <div class="flex flex-wrap items-center gap-4">
+                    <!-- Search -->
+                    <div class="flex-1 min-w-[300px]">
+                        <div class="relative">
+                            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span>
+                            <input 
+                                type="text" 
+                                id="searchInput"
+                                placeholder="Search by name, email, or username..."
+                                class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                                oninput="handleSearch()"
+                            />
+                        </div>
+                    </div>
+                    
+                    <!-- Department Filter -->
+                    <select id="departmentFilter" onchange="handleFilter()" class="px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-2 focus:ring-primary focus:border-transparent">
+                        <option value="">All Departments</option>
+                    </select>
+                    
+                    <!-- Status Filter -->
+                    <select id="statusFilter" onchange="handleFilter()" class="px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-2 focus:ring-primary focus:border-transparent">
+                        <option value="">All Status</option>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                        <option value="suspended">Suspended</option>
+                    </select>
+                    
+                    <!-- Refresh -->
+                    <button onclick="loadEmployees()" class="p-2.5 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <span class="material-symbols-outlined">refresh</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Employee List -->
+            <div class="flex-1 overflow-y-auto p-8">
+                <!-- Stats Summary -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 font-medium">Total Employees</p>
+                                <p id="totalCount" class="text-3xl font-bold text-gray-900 dark:text-white mt-1">-</p>
+                            </div>
+                            <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
+                                <span class="material-symbols-outlined text-primary text-2xl">groups</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 font-medium">Active</p>
+                                <p id="activeCount" class="text-3xl font-bold text-green-600 dark:text-green-400 mt-1">-</p>
+                            </div>
+                            <div class="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center">
+                                <span class="material-symbols-outlined text-green-600 dark:text-green-400 text-2xl">check_circle</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 font-medium">Departments</p>
+                                <p id="deptCount" class="text-3xl font-bold text-blue-600 dark:text-blue-400 mt-1">-</p>
+                            </div>
+                            <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
+                                <span class="material-symbols-outlined text-blue-600 dark:text-blue-400 text-2xl">corporate_fare</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 font-medium">Admins</p>
+                                <p id="adminCount" class="text-3xl font-bold text-purple-600 dark:text-purple-400 mt-1">-</p>
+                            </div>
+                            <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center">
+                                <span class="material-symbols-outlined text-purple-600 dark:text-purple-400 text-2xl">shield_person</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Grid View -->
+                <div id="gridView" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <!-- Loading skeletons -->
+                    <div class="skeleton bg-gray-200 dark:bg-gray-700 rounded-xl h-64"></div>
+                    <div class="skeleton bg-gray-200 dark:bg-gray-700 rounded-xl h-64"></div>
+                    <div class="skeleton bg-gray-200 dark:bg-gray-700 rounded-xl h-64"></div>
+                    <div class="skeleton bg-gray-200 dark:bg-gray-700 rounded-xl h-64"></div>
+                </div>
+                
+                <!-- List View (Hidden by default) -->
+                <div id="listView" class="hidden bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+                    <table class="w-full">
+                        <thead class="bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
+                            <tr>
+                                <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase">Employee</th>
+                                <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase">Username</th>
+                                <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase">Department</th>
+                                <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase">Role</th>
+                                <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase">Status</th>
+                                <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="listViewBody" class="divide-y divide-gray-200 dark:divide-gray-700">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Empty State -->
+                <div id="emptyState" class="hidden text-center py-16">
+                    <div class="w-24 h-24 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="material-symbols-outlined text-5xl text-gray-400">person_search</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">No employees found</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Try adjusting your search or filters</p>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script src="index.js"></script>
+    <script src="auth.js"></script>
+    <script src="dashboard.js"></script>
+    <script>
+        let currentView = 'grid';
+        let employees = [];
+        let departments = [];
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            DashboardInit.init();
+            loadEmployees();
+        });
+        
+        // Load employees from API
+        async function loadEmployees() {
+            try {
+                const search = document.getElementById('searchInput').value;
+                const department = document.getElementById('departmentFilter').value;
+                const status = document.getElementById('statusFilter').value;
+                
+                const params = new URLSearchParams();
+                if (search) params.append('search', search);
+                if (department) params.append('department', department);
+                if (status) params.append('status', status);
+                
+                const response = await fetch(`../backend/get_employees.php?${params}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    employees = data.employees;
+                    departments = data.departments;
+                    
+                    updateStats();
+                    populateDepartments();
+                    renderEmployees();
+                }
+            } catch (error) {
+                console.error('Error loading employees:', error);
+                showToast('Failed to load employees', 'error');
+            }
+        }
+        
+        // Update statistics
+        function updateStats() {
+            document.getElementById('totalCount').textContent = employees.length;
+            document.getElementById('activeCount').textContent = employees.filter(e => e.status === 'active').length;
+            document.getElementById('deptCount').textContent = departments.length;
+            document.getElementById('adminCount').textContent = employees.filter(e => e.role === 'admin').length;
+        }
+        
+        // Populate department filter
+        function populateDepartments() {
+            const select = document.getElementById('departmentFilter');
+            const currentValue = select.value;
+            
+            select.innerHTML = '<option value="">All Departments</option>';
+            departments.forEach(dept => {
+                select.innerHTML += `<option value="${dept}">${dept}</option>`;
+            });
+            
+            select.value = currentValue;
+        }
+        
+        // Render employees
+        function renderEmployees() {
+            if (employees.length === 0) {
+                document.getElementById('gridView').classList.add('hidden');
+                document.getElementById('listView').classList.add('hidden');
+                document.getElementById('emptyState').classList.remove('hidden');
+                return;
+            }
+            
+            document.getElementById('emptyState').classList.add('hidden');
+            
+            if (currentView === 'grid') {
+                renderGridView();
+            } else {
+                renderListView();
+            }
+        }
+        
+        // Render grid view
+        function renderGridView() {
+            const container = document.getElementById('gridView');
+            container.classList.remove('hidden');
+            document.getElementById('listView').classList.add('hidden');
+            
+            container.innerHTML = employees.map(emp => {
+                const initials = (emp.first_name[0] + emp.last_name[0]).toUpperCase();
+                const statusColors = {
+                    active: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',
+                    inactive: 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-400',
+                    suspended: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
+                };
+                
+                return `
+                    <div class="employee-card bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+                        <div class="flex flex-col items-center text-center">
+                            <div class="w-20 h-20 rounded-full bg-gradient-to-br from-primary to-orange-500 flex items-center justify-center text-white text-2xl font-bold mb-4">
+                                ${initials}
+                            </div>
+                            
+                            <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-1">${emp.full_name}</h3>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">@${emp.username}</p>
+                            <p class="text-sm text-primary font-medium mb-3">${emp.department || 'No Department'}</p>
+                            
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${statusColors[emp.status] || statusColors.inactive} mb-4">
+                                ${emp.status.charAt(0).toUpperCase() + emp.status.slice(1)}
+                            </span>
+                            
+                            <div class="w-full space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                                <div class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-sm">email</span>
+                                    <span class="truncate">${emp.email}</span>
+                                </div>
+                                ${emp.phone ? `
+                                <div class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-sm">phone</span>
+                                    <span>${emp.phone}</span>
+                                </div>
+                                ` : ''}
+                                <div class="flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-sm">badge</span>
+                                    <span class="capitalize">${emp.role}</span>
+                                </div>
+                            </div>
+                            
+                            <div class="flex gap-2 mt-4 w-full">
+                                <button onclick="viewEmployee(${emp.id})" class="flex-1 px-4 py-2 bg-primary hover:bg-primary-dark text-white rounded-lg text-sm font-medium transition-colors">
+                                    View Profile
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // Render list view
+        function renderListView() {
+            const container = document.getElementById('listView');
+            const tbody = document.getElementById('listViewBody');
+            
+            container.classList.remove('hidden');
+            document.getElementById('gridView').classList.add('hidden');
+            
+            const statusColors = {
+                active: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',
+                inactive: 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-400',
+                suspended: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
+            };
+            
+            tbody.innerHTML = employees.map(emp => {
+                const initials = (emp.first_name[0] + emp.last_name[0]).toUpperCase();
+                return `
+                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-orange-500 flex items-center justify-center text-white font-bold">
+                                    ${initials}
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-gray-900 dark:text-white">${emp.full_name}</p>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">${emp.email}</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 text-gray-900 dark:text-white">@${emp.username}</td>
+                        <td class="px-6 py-4 text-gray-900 dark:text-white">${emp.department || '-'}</td>
+                        <td class="px-6 py-4">
+                            <span class="capitalize inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${emp.role === 'admin' ? 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400' : 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400'}">
+                                ${emp.role}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${statusColors[emp.status] || statusColors.inactive}">
+                                ${emp.status.charAt(0).toUpperCase() + emp.status.slice(1)}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4">
+                            <button onclick="viewEmployee(${emp.id})" class="text-primary hover:text-primary-dark font-semibold text-sm">
+                                View
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+        
+        // Toggle view
+        function toggleView() {
+            currentView = currentView === 'grid' ? 'list' : 'grid';
+            document.getElementById('viewToggleIcon').textContent = currentView === 'grid' ? 'grid_view' : 'view_list';
+            renderEmployees();
+        }
+        
+        // Search handler
+        let searchTimeout;
+        function handleSearch() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                loadEmployees();
+            }, 500);
+        }
+        
+        // Filter handler
+        function handleFilter() {
+            loadEmployees();
+        }
+        
+        // View employee
+        function viewEmployee(id) {
+            // TODO: Navigate to employee detail page
+            showToast('Employee profile coming soon!', 'info');
+        }
+    </script>
+</body>
+</html>

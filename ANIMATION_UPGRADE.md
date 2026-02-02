@@ -10,8 +10,6 @@ All 12 HTML pages have been enhanced with modern animations and interactive feat
 
 ### Admin Pages
 - ✅ **admin_dashboard_overview.html** - Animated stat cards, ripple buttons, hover effects
-- ✅ **admin_dashboard_overview_orange.html** - Animated stat cards, ripple buttons, hover effects  
-- ✅ **admin_management_dashboard.html** - Page animations, stat card hover effects
 
 ### Employee Pages
 - ✅ **employee_personalized_dashboard.html** - Animated headers, enhanced buttons, card animations
