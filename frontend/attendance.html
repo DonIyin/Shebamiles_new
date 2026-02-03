@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Attendance Management - Admin</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="index.css" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f97316",
+                        "primary-dark": "#ea580c",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101822",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+.shebamiles-logo {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 900;
+    font-size: 1.25rem;
+    background: linear-gradient(135deg, #f97316 0%, #fb923c 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.02em;
+}
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+        }
+        :root {
+            --primary-color: #f97316;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="flex flex-col h-full w-full">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-10 py-3 sticky top-0 z-50">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-4 text-primary">
+<a class="shebamiles-logo hover:opacity-80 transition-opacity" href="index.html">Shebamiles</a>
+</div>
+<label class="flex flex-col min-w-40 h-10 max-w-64">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full bg-slate-100 dark:bg-slate-800">
+<div class="text-slate-500 flex items-center justify-center pl-4">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="form-input flex w-full border-none bg-transparent focus:ring-0 text-sm" placeholder="Search employees..."/>
+</div>
+</label>
+</div>
+<div class="flex flex-1 justify-end gap-8">
+<nav class="flex items-center gap-6">
+<a class="text-slate-600 dark:text-slate-300 text-sm font-medium hover:text-primary transition-colors" href="admin_dashboard_overview.html">Dashboard</a>
+<a class="text-primary text-sm font-bold border-b-2 border-primary py-1" href="attendance.html">Attendance</a>
+<a class="text-slate-600 dark:text-slate-300 text-sm font-medium hover:text-primary transition-colors" href="add_employee.html">Employees</a>
+<a class="text-slate-600 dark:text-slate-300 text-sm font-medium hover:text-primary transition-colors" href="employee_leave_request_page.html">Leave</a>
+</nav>
+<div class="flex gap-2">
+<button class="flex items-center justify-center rounded-lg h-10 w-10 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="flex items-center justify-center rounded-lg h-10 w-10 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border-2 border-primary/20" data-alt="User profile avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuChO4vXLxrfN0q55e0E1wkDIuL0vBJePKBrpuK8Oq3eArbmsGzOwj8TgybWCprza29UP6EQ4fRYV1JNnaxDM3SBexQc6uHqQB5zHIeGIxGq4_lv5tb_uEYIt6yudOxKVXzlvBwhk8G9v7avhdedruyi557E3bLIlNdwbXT__H0ZNl8AKQ-IA_lpvgjDqaHga2g_RVmTYW1bNCOpCNAnEBe08NK0vfUMxYhej7O4C62B2uT-Vnu7x04pkTbO0jHls4IC8BJyjM_p6bJ3");'></div>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<aside class="w-64 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-col p-4 shrink-0">
+<div class="flex flex-col gap-6">
+<div>
+<h1 class="text-slate-900 dark:text-white text-base font-bold">HR Administration</h1>
+<p class="text-slate-500 dark:text-slate-400 text-xs">Global Business Unit</p>
+</div>
+<div class="space-y-1">
+<p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 px-3">Main View</p>
+<div class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer">
+<span class="material-symbols-outlined">grid_view</span>
+<p class="text-sm font-medium">Overview</p>
+</div>
+<div class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/10 text-primary cursor-pointer">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">calendar_today</span>
+<p class="text-sm font-bold">Attendance Log</p>
+</div>
+<div class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer">
+<span class="material-symbols-outlined">description</span>
+<p class="text-sm font-medium">Monthly Reports</p>
+</div>
+</div>
+<hr class="border-slate-100 dark:border-slate-800"/>
+<div class="space-y-4">
+<p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-3">Filters</p>
+<div class="px-3">
+<label class="text-xs font-medium text-slate-500 mb-1 block">Department</label>
+<select class="w-full bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:ring-primary focus:border-primary" id="departmentFilter">
+<option value="">All Departments</option>
+<option value="Engineering">Engineering</option>
+<option value="Marketing">Marketing</option>
+<option value="Sales">Sales</option>
+<option value="Human Resources">Human Resources</option>
+<option value="Finance">Finance</option>
+<option value="Operations">Operations</option>
+</select>
+</div>
+<div class="px-3">
+<label class="text-xs font-medium text-slate-500 mb-1 block">Select Month</label>
+<select class="w-full bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:ring-primary focus:border-primary" id="monthFilter">
+<option selected="">February 2026</option>
+<option>January 2026</option>
+<option>March 2026</option>
+</select>
+</div>
+<div class="px-3 pt-4">
+<div class="bg-primary/5 dark:bg-primary/10 rounded-xl p-4 border border-primary/10">
+<p class="text-xs font-bold text-primary mb-2">Legend</p>
+<div class="space-y-2">
+<div class="flex items-center gap-2">
+<span class="size-3 rounded-full bg-green-500"></span>
+<span class="text-xs text-slate-600 dark:text-slate-300">Present</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="size-3 rounded-full bg-amber-500"></span>
+<span class="text-xs text-slate-600 dark:text-slate-300">Late</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="size-3 rounded-full bg-red-500"></span>
+<span class="text-xs text-slate-600 dark:text-slate-300">Absent</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</aside>
+<main class="flex-1 overflow-y-auto bg-slate-50 dark:bg-background-dark p-8">
+<div class="max-w-6xl mx-auto space-y-8">
+<div class="flex flex-wrap justify-between items-end gap-3 animate-fade-in-up">
+<div class="flex flex-col gap-1">
+<p class="text-slate-900 dark:text-white text-3xl font-black tracking-tight">Attendance Management</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm">All Employee Attendance Tracking &amp; Records</p>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 rounded-lg h-10 px-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 text-sm font-bold shadow-sm hover:bg-slate-50 ripple hover-scale">
+<span class="material-symbols-outlined text-lg">file_download</span>
+<span>Export Report</span>
+</button>
+<button class="flex items-center gap-2 rounded-lg h-10 px-4 bg-primary hover:bg-primary-dark text-white text-sm font-bold shadow-lg shadow-primary/20 ripple hover-scale">
+<span class="material-symbols-outlined text-lg">add</span>
+<span>Manual Entry</span>
+</button>
+</div>
+</div>
+<div class="p-1 @container">
+<div class="flex flex-col items-stretch justify-start rounded-xl @xl:flex-row @xl:items-center shadow-md bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 overflow-hidden scroll-reveal card-enhanced">
+<div class="w-full @xl:w-1/3 bg-primary/10 h-full min-h-[160px] flex flex-col items-center justify-center p-6 text-center relative overflow-hidden">
+<div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(circle at 2px 2px, #f97316 1px, transparent 0); background-size: 20px 20px;"></div>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-widest mb-1">Server Time</p>
+<p class="text-primary text-4xl font-black" id="serverTime">09:42:15 AM</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm mt-1" id="serverDate">Tuesday, Feb 3, 2026</p>
+</div>
+<div class="flex-1 p-6 flex items-center justify-between flex-wrap gap-4">
+<div class="flex flex-col gap-1">
+<p class="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-widest mb-1">Today's Summary</p>
+<p class="text-slate-900 dark:text-white text-xl font-bold" id="todaySummary">Loading attendance data...</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm italic" id="summaryDetail">Calculating...</p>
+</div>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+<div class="flex flex-col gap-2 rounded-xl p-5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover-lift scroll-reveal">
+<p class="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider">Total Present</p>
+<div class="flex items-baseline justify-between">
+<p class="text-slate-900 dark:text-white text-2xl font-black" id="totalPresent">-</p>
+<p class="text-green-500 text-sm font-bold flex items-center"><span class="material-symbols-outlined text-sm">trending_up</span> <span id="presentTrend">-</span></p>
+</div>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+<p class="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider">Absent Today</p>
+<div class="flex items-baseline justify-between">
+<p class="text-slate-900 dark:text-white text-2xl font-black" id="totalAbsent">-</p>
+<p class="text-red-500 text-sm font-bold flex items-center"><span class="material-symbols-outlined text-sm">trending_up</span> <span id="absentTrend">-</span></p>
+</div>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+<p class="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider">Late Arrivals</p>
+<div class="flex items-baseline justify-between">
+<p class="text-slate-900 dark:text-white text-2xl font-black" id="totalLate">-</p>
+<p class="text-green-500 text-sm font-bold flex items-center"><span class="material-symbols-outlined text-sm">trending_down</span> <span id="lateTrend">-</span></p>
+</div>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+<p class="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider">Avg. Work Hours</p>
+<div class="flex items-baseline justify-between">
+<p class="text-slate-900 dark:text-white text-2xl font-black" id="avgWorkHours">-</p>
+<p class="text-slate-400 text-sm font-medium">Updated</p>
+</div>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm">
+<div class="p-6 border-b border-slate-100 dark:border-slate-700">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white">Employee Attendance List</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400 mt-1">View and manage attendance records for all employees</p>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full">
+<thead class="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700">
+<tr>
+<th class="px-6 py-4 text-left text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Employee</th>
+<th class="px-6 py-4 text-left text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Department</th>
+<th class="px-6 py-4 text-left text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Today's Status</th>
+<th class="px-6 py-4 text-left text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Check-In Time</th>
+<th class="px-6 py-4 text-left text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Work Hours</th>
+<th class="px-6 py-4 text-left text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-200 dark:divide-slate-700" id="attendanceTableBody">
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+<td class="px-6 py-4" colspan="6">
+<div class="flex items-center justify-center py-8">
+<div class="animate-spin">
+<span class="material-symbols-outlined text-primary">refresh</span>
+</div>
+<span class="text-slate-500 dark:text-slate-400 ml-3">Loading attendance records...</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700 flex items-center gap-6">
+<div class="size-12 rounded-full bg-primary/10 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-3xl">info</span>
+</div>
+<div class="flex-1">
+<h4 class="text-base font-bold text-slate-900 dark:text-white">Attendance Record Management</h4>
+<p class="text-sm text-slate-500 dark:text-slate-400">Records are automatically locked at the end of each billing cycle. For manual corrections or modifications, use the manual entry feature above.</p>
+</div>
+<button class="px-4 py-2 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
+                        Learn More
+                    </button>
+</div>
+</div>
+</main>
+</div>
+</div>
+
+<script src="index.js"></script>
+<script>
+// Update server time
+function updateServerTime() {
+  const now = new Date('2026-02-03T09:42:15');
+  const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  const dateStr = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  document.getElementById('serverTime').textContent = timeStr;
+  document.getElementById('serverDate').textContent = dateStr;
+}
+
+// Check if user is admin
+async function checkAdminAccess() {
+  try {
+    const response = await fetch('../backend/employee_profile_api.php');
+    const data = await response.json();
+    
+    if (!data.success || data.role !== 'admin') {
+      window.location.href = 'admin_dashboard_overview.html';
+    }
+  } catch (error) {
+    console.error('Error checking admin access:', error);
+    window.location.href = 'admin_dashboard_overview.html';
+  }
+}
+
+// Load attendance data for all employees
+async function loadAttendanceData() {
+  try {
+    // Get all employees and their attendance
+    const response = await fetch('../backend/employee_create_api.php?action=list');
+    const data = await response.json();
+    
+    if (!data.success) {
+      console.error('Failed to load employee data');
+      return;
+    }
+    
+    let employees = data.employees || [];
+    const department = document.getElementById('departmentFilter').value || '';
+    
+    // Filter by department if selected
+    if (department) {
+      employees = employees.filter(emp => emp.department === department);
+    }
+    
+    const tableBody = document.getElementById('attendanceTableBody');
+    
+    if (employees.length === 0) {
+      tableBody.innerHTML = `
+        <tr>
+          <td class="px-6 py-8 text-center" colspan="6">
+            <p class="text-slate-500 dark:text-slate-400">No attendance records found</p>
+          </td>
+        </tr>
+      `;
+      return;
+    }
+    
+    // Calculate summary statistics
+    let presentCount = 0;
+    let absentCount = 0;
+    let lateCount = 0;
+    let totalHours = 0;
+    
+    tableBody.innerHTML = employees.map(emp => {
+      let statusHTML = '';
+      let statusClass = '';
+      
+      if (emp.status === 'present') {
+        statusHTML = '<span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"><span class="size-2 rounded-full bg-green-500"></span>Present</span>';
+        statusClass = 'green';
+        presentCount++;
+      } else if (emp.status === 'late') {
+        statusHTML = '<span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400"><span class="size-2 rounded-full bg-amber-500"></span>Late</span>';
+        statusClass = 'amber';
+        lateCount++;
+        presentCount++;
+      } else if (emp.status === 'absent') {
+        statusHTML = '<span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"><span class="size-2 rounded-full bg-red-500"></span>Absent</span>';
+        statusClass = 'red';
+        absentCount++;
+      } else {
+        statusHTML = '<span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300"><span class="size-2 rounded-full bg-slate-500"></span>Not Marked</span>';
+        statusClass = 'gray';
+      }
+      
+      if (emp.work_hours) {
+        totalHours += parseFloat(emp.work_hours);
+      }
+      
+      return `
+        <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+          <td class="px-6 py-4">
+            <div class="flex items-center gap-3">
+              <div class="size-10 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-sm">
+                ${emp.first_name.charAt(0)}${emp.last_name.charAt(0)}
+              </div>
+              <div>
+                <p class="text-sm font-semibold text-slate-900 dark:text-white">${emp.first_name} ${emp.last_name}</p>
+                <p class="text-xs text-slate-500 dark:text-slate-400">${emp.email || 'N/A'}</p>
+              </div>
+            </div>
+          </td>
+          <td class="px-6 py-4">
+            <p class="text-sm text-slate-600 dark:text-slate-300 font-medium">${emp.department || 'N/A'}</p>
+          </td>
+          <td class="px-6 py-4">
+            ${statusHTML}
+          </td>
+          <td class="px-6 py-4">
+            <p class="text-sm text-slate-600 dark:text-slate-300 font-medium">${emp.check_in_time || '-'}</p>
+          </td>
+          <td class="px-6 py-4">
+            <p class="text-sm text-slate-600 dark:text-slate-300 font-medium">${emp.work_hours ? emp.work_hours + 'h' : '-'}</p>
+          </td>
+          <td class="px-6 py-4">
+            <div class="flex items-center gap-2">
+              <button class="p-1.5 text-slate-400 hover:text-primary hover:bg-primary/10 rounded transition-colors" title="Edit">
+                <span class="material-symbols-outlined text-[20px]">edit</span>
+              </button>
+              <button class="p-1.5 text-slate-400 hover:text-amber-500 hover:bg-amber-50 dark:hover:bg-amber-900/20 rounded transition-colors" title="View Details">
+                <span class="material-symbols-outlined text-[20px]">info</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+    
+    // Update statistics
+    const totalEmployees = employees.length;
+    const avgHours = totalHours / (totalEmployees || 1);
+    
+    document.getElementById('totalPresent').textContent = presentCount;
+    document.getElementById('totalAbsent').textContent = absentCount;
+    document.getElementById('totalLate').textContent = lateCount;
+    document.getElementById('avgWorkHours').textContent = avgHours.toFixed(1) + 'h';
+    
+    const presentPercent = ((presentCount / totalEmployees) * 100).toFixed(0);
+    const absentPercent = ((absentCount / totalEmployees) * 100).toFixed(0);
+    const latePercent = ((lateCount / totalEmployees) * 100).toFixed(0);
+    
+    document.getElementById('presentTrend').textContent = presentPercent + '%';
+    document.getElementById('absentTrend').textContent = absentPercent + '%';
+    document.getElementById('lateTrend').textContent = latePercent + '%';
+    
+    document.getElementById('todaySummary').textContent = `${presentCount} Present, ${lateCount} Late, ${absentCount} Absent`;
+    document.getElementById('summaryDetail').textContent = `Out of ${totalEmployees} total employees`;
+    
+  } catch (error) {
+    console.error('Error loading attendance data:', error);
+    document.getElementById('attendanceTableBody').innerHTML = `
+      <tr>
+        <td class="px-6 py-8 text-center text-red-500" colspan="6">
+          Error loading attendance data
+        </td>
+      </tr>
+    `;
+  }
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+  // Check admin access
+  checkAdminAccess();
+  
+  // Update server time
+  updateServerTime();
+  
+  // Load initial data
+  loadAttendanceData();
+  
+  // Add filter listeners
+  document.getElementById('departmentFilter').addEventListener('change', loadAttendanceData);
+  document.getElementById('monthFilter').addEventListener('change', loadAttendanceData);
+});
+</script>
+</body></html>
