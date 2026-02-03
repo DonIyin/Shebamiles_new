@@ -14,6 +14,13 @@ if (!isLoggedIn()) {
     exit();
 }
 
+// Only admins can view employee list
+if ($_SESSION['role'] !== 'admin') {
+    http_response_code(403);
+    echo json_encode(['success' => false, 'message' => 'Admin access required']);
+    exit();
+}
+
 // Get query parameters
 $search = isset($_GET['search']) ? sanitize($_GET['search']) : '';
 $department = isset($_GET['department']) ? sanitize($_GET['department']) : '';

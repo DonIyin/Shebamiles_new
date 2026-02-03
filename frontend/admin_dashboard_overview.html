@@ -229,35 +229,13 @@
 <span class="material-symbols-outlined text-primary">history</span>
                     Recent Activity
                 </h3>
-<div class="space-y-6">
+<div id="recentActivityList" class="space-y-6">
 <div class="flex gap-4">
-<div class="size-10 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center shrink-0">
-<span class="material-symbols-outlined text-primary dark:text-primary text-xl">person_add</span>
-</div>
-<div>
-<p class="text-sm font-bold">New employee onboarded</p>
-<p class="text-xs text-slate-500">Sarah Johnson joined the Design Team</p>
-<p class="text-[10px] text-slate-400 mt-1 uppercase font-bold tracking-wider">2 hours ago</p>
-</div>
-</div>
-<div class="flex gap-4">
-<div class="size-10 rounded-full bg-emerald-100 dark:bg-emerald-900 flex items-center justify-center shrink-0">
-<span class="material-symbols-outlined text-emerald-600 dark:text-emerald-300 text-xl">verified</span>
-</div>
-<div>
-<p class="text-sm font-bold">Performance review completed</p>
-<p class="text-xs text-slate-500">Michael Chen - Q3 Technical Assessment</p>
-<p class="text-[10px] text-slate-400 mt-1 uppercase font-bold tracking-wider">5 hours ago</p>
-</div>
-</div>
-<div class="flex gap-4">
-<div class="size-10 rounded-full bg-amber-100 dark:bg-amber-900 flex items-center justify-center shrink-0">
-<span class="material-symbols-outlined text-amber-600 dark:text-amber-300 text-xl">request_quote</span>
-</div>
-<div>
-<p class="text-sm font-bold">Leave request pending</p>
-<p class="text-xs text-slate-500">James Wilson requested 3 days of sick leave</p>
-<p class="text-[10px] text-slate-400 mt-1 uppercase font-bold tracking-wider">Yesterday</p>
+<div class="size-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center shrink-0 skeleton"></div>
+<div class="flex-1 space-y-2">
+<div class="h-3 bg-slate-100 dark:bg-slate-800 rounded skeleton w-1/2"></div>
+<div class="h-3 bg-slate-100 dark:bg-slate-800 rounded skeleton w-3/4"></div>
+<div class="h-2 bg-slate-100 dark:bg-slate-800 rounded skeleton w-1/3"></div>
 </div>
 </div>
 </div>
@@ -268,44 +246,18 @@
 <span class="material-symbols-outlined text-primary">event_busy</span>
                     Upcoming Absences
                 </h3>
-<div class="space-y-4">
+<div id="upcomingAbsencesList" class="space-y-4">
 <div class="flex items-center justify-between p-3 rounded-lg border border-slate-100 dark:border-slate-800">
 <div class="flex items-center gap-3">
-<div class="size-8 rounded-full bg-slate-100 bg-cover bg-center" data-alt="Avatar of employee on leave" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC4Xv4sfD_9EqfY79l8B1uicTSZ3DerNVVnWnxfnvuwHW6H3gAr_nFnKiXOsul-Egz8Bx7-_siOF_KlsYD0PLkw6_NT_jLjaCjUPo2AgmWxvlCfJr4DvbEYEiErhNt07xxcxB0SzUOOG-Zk3v3CYaSyhj7p0BKdujAsdgcwFYk89EydPHjPVZVi9VhN30ySX4_35tw_sDf174qLcj_aQ0Lm1zPR1v6vuWeHv9yfu5DMaLrgEN6QBNzAt1UpUr5G53BfeTe4lfV44Ala");'></div>
-<div>
-<p class="text-sm font-bold">Emma Thompson</p>
-<p class="text-[10px] text-slate-500 uppercase font-bold tracking-widest">Marketing</p>
+<div class="size-8 rounded-full bg-slate-100 dark:bg-slate-800 skeleton"></div>
+<div class="space-y-2">
+<div class="h-3 bg-slate-100 dark:bg-slate-800 rounded skeleton w-24"></div>
+<div class="h-2 bg-slate-100 dark:bg-slate-800 rounded skeleton w-20"></div>
 </div>
 </div>
-<div class="text-right">
-<p class="text-xs font-bold text-primary">Feb 10 - Feb 13</p>
-<p class="text-[10px] text-slate-400">Annual Leave</p>
-</div>
-</div>
-<div class="flex items-center justify-between p-3 rounded-lg border border-slate-100 dark:border-slate-800">
-<div class="flex items-center gap-3">
-<div class="size-8 rounded-full bg-slate-100 bg-cover bg-center" data-alt="Avatar of employee on leave" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCIqRbuUeQ7oRuBdXCI9Bx-C4QAgbt26RWgKOJcxVQGeyouleFva8T_y_uwL8bBjRRz3Y0u7Y1je3chE79UPRHKuJHzcIKmvAg8UMMcxUORG02SV5wdmQRFijfAqKBIYQFfSASaJ2yxIUZCFKTwDbK1xgfsMJFe-DCUCk4HOdBG7pZCvaSGhS_Ws-ydM0Xkwvd-WBiLw-udVJZX8vAzXgg6C_z278uTLX7vfw0JhQ-ePCDiCUCE9HH9b8gPMYFG_p0kxXJBuGLBRb23");'></div>
-<div>
-<p class="text-sm font-bold">David Smith</p>
-<p class="text-[10px] text-slate-500 uppercase font-bold tracking-widest">Engineering</p>
-</div>
-</div>
-<div class="text-right">
-<p class="text-xs font-bold text-primary">Feb 12</p>
-<p class="text-[10px] text-slate-400">Personal Day</p>
-</div>
-</div>
-<div class="flex items-center justify-between p-3 rounded-lg border border-slate-100 dark:border-slate-800">
-<div class="flex items-center gap-3">
-<div class="size-8 rounded-full bg-slate-100 bg-cover bg-center" data-alt="Avatar of employee on leave" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBzTjSK7071Ce-6dlPnQ2g24JhjsQDmFPKV67jarpnUiaeCBaVHuJ8Um_f7HQ422PR_9HXXuW7TGFDqeowHNgvizxl3ADh4epRKAfGWRnYl3nUfYGtK5DfjL8xChDGvudD1HYnW4emmQ_wu02oKbgpwZunzK77UmOg8QdZiQoQ2cWsFrsn2lJsfqgR8sgGm6UDBo5Jk6E0eFnraFg7G41jlSXfpmqQV30mzvKd76vbxDjG9TdxyQWlKt1Ef_Woz5TcyWsuwNjY8AQld");'></div>
-<div>
-<p class="text-sm font-bold">Chris Miller</p>
-<p class="text-[10px] text-slate-500 uppercase font-bold tracking-widest">Operations</p>
-</div>
-</div>
-<div class="text-right">
-<p class="text-xs font-bold text-primary">Feb 17 - Feb 19</p>
-<p class="text-[10px] text-slate-400">Conference</p>
+<div class="text-right space-y-2">
+<div class="h-3 bg-slate-100 dark:bg-slate-800 rounded skeleton w-16 ml-auto"></div>
+<div class="h-2 bg-slate-100 dark:bg-slate-800 rounded skeleton w-20 ml-auto"></div>
 </div>
 </div>
 </div>
@@ -369,7 +321,139 @@
         }
     }
 
+    function createActivityRow(item) {
+        const row = document.createElement('div');
+        row.className = 'flex gap-4';
+
+        const iconWrap = document.createElement('div');
+        iconWrap.className = 'size-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center shrink-0';
+
+        const icon = document.createElement('span');
+        icon.className = 'material-symbols-outlined text-xl';
+        if (item.icon_class) {
+            icon.classList.add(...item.icon_class.split(' '));
+        } else {
+            icon.classList.add('text-primary');
+        }
+        icon.textContent = item.icon || 'notifications';
+
+        iconWrap.appendChild(icon);
+
+        const content = document.createElement('div');
+        const title = document.createElement('p');
+        title.className = 'text-sm font-bold';
+        title.textContent = item.title || 'Activity Update';
+
+        const description = document.createElement('p');
+        description.className = 'text-xs text-slate-500';
+        description.textContent = item.description || '';
+
+        const time = document.createElement('p');
+        time.className = 'text-[10px] text-slate-400 mt-1 uppercase font-bold tracking-wider';
+        time.textContent = item.time_ago || 'Just now';
+
+        content.appendChild(title);
+        content.appendChild(description);
+        content.appendChild(time);
+
+        row.appendChild(iconWrap);
+        row.appendChild(content);
+
+        return row;
+    }
+
+    function createAbsenceRow(item) {
+        const row = document.createElement('div');
+        row.className = 'flex items-center justify-between p-3 rounded-lg border border-slate-100 dark:border-slate-800';
+
+        const left = document.createElement('div');
+        left.className = 'flex items-center gap-3';
+
+        const avatar = document.createElement('div');
+        avatar.className = 'size-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-[10px] font-bold text-slate-500';
+        const initials = (item.name || 'NA')
+            .split(' ')
+            .map(part => part.charAt(0))
+            .slice(0, 2)
+            .join('')
+            .toUpperCase();
+        avatar.textContent = initials;
+
+        const meta = document.createElement('div');
+        const name = document.createElement('p');
+        name.className = 'text-sm font-bold';
+        name.textContent = item.name || 'Employee';
+
+        const dept = document.createElement('p');
+        dept.className = 'text-[10px] text-slate-500 uppercase font-bold tracking-widest';
+        dept.textContent = item.department || 'General';
+
+        meta.appendChild(name);
+        meta.appendChild(dept);
+
+        left.appendChild(avatar);
+        left.appendChild(meta);
+
+        const right = document.createElement('div');
+        right.className = 'text-right';
+
+        const range = document.createElement('p');
+        range.className = 'text-xs font-bold text-primary';
+        range.textContent = item.date_range || 'TBD';
+
+        const type = document.createElement('p');
+        type.className = 'text-[10px] text-slate-400';
+        type.textContent = item.leave_type || 'Leave';
+
+        right.appendChild(range);
+        right.appendChild(type);
+
+        row.appendChild(left);
+        row.appendChild(right);
+
+        return row;
+    }
+
+    async function loadDashboardActivity() {
+        const activityList = document.getElementById('recentActivityList');
+        const absenceList = document.getElementById('upcomingAbsencesList');
+
+        if (!activityList || !absenceList) return;
+
+        try {
+            const response = await fetch('../backend/admin_dashboard_activity.php');
+            const data = await response.json();
+
+            if (!response.ok || !data.success) {
+                activityList.innerHTML = '<p class="text-xs text-slate-500">Unable to load activity.</p>';
+                absenceList.innerHTML = '<p class="text-xs text-slate-500">Unable to load absences.</p>';
+                return;
+            }
+
+            activityList.innerHTML = '';
+            if (data.recent_activity && data.recent_activity.length) {
+                data.recent_activity.forEach(item => {
+                    activityList.appendChild(createActivityRow(item));
+                });
+            } else {
+                activityList.innerHTML = '<p class="text-xs text-slate-500">No recent activity found.</p>';
+            }
+
+            absenceList.innerHTML = '';
+            if (data.upcoming_absences && data.upcoming_absences.length) {
+                data.upcoming_absences.forEach(item => {
+                    absenceList.appendChild(createAbsenceRow(item));
+                });
+            } else {
+                absenceList.innerHTML = '<p class="text-xs text-slate-500">No upcoming absences.</p>';
+            }
+        } catch (error) {
+            console.error('Error loading dashboard activity:', error);
+        }
+    }
+
     // Load stats when page loads
     loadDashboardStats();
+    loadDashboardActivity();
 </script>
 </body></html>

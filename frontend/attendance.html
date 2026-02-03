@@ -277,14 +277,32 @@ function updateServerTime() {
 async function checkAdminAccess() {
   try {
     const response = await fetch('../backend/employee_profile_api.php');
-    const data = await response.json();
     
-    if (!data.success || data.role !== 'admin') {
-      window.location.href = 'admin_dashboard_overview.html';
+    if (!response.ok) {
+      console.error('Failed to fetch profile:', response.status);
+      window.location.href = 'index.html';
+      return;
     }
+    
+    const data = await response.json();
+    console.log('Profile data:', data); // Debug log
+    
+    if (!data.success) {
+      console.error('Profile API returned error:', data.message);
+      window.location.href = 'index.html';
+      return;
+    }
+    
+    if (data.profile.role !== 'admin') {
+      console.log('User is not admin, redirecting to employee dashboard');
+      window.location.href = 'employee_personalized_dashboard.html';
+      return;
+    }
+    
+    console.log('Admin access granted');
   } catch (error) {
     console.error('Error checking admin access:', error);
-    window.location.href = 'admin_dashboard_overview.html';
+    window.location.href = 'index.html';
   }
 }
 
