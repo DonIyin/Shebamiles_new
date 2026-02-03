@@ -128,7 +128,7 @@ $stmt->execute();
 // Clear failed login attempts
 $query = "DELETE FROM login_attempts WHERE email = ?";
 $stmt = $conn->prepare($query);
-$stmt->bind_param('s', $email);
+$stmt->bind_param('s', $username);
 $stmt->execute();
 
 // Log successful login

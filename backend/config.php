@@ -103,13 +103,6 @@ function validateCSRFToken($token) {
     return hash_equals($_SESSION['csrf_token'], $token);
 }
 
-// Function to redirect to login if not authenticated
-function requireLogin() {
-    if (!isLoggedIn()) {
-        header('Location: ' . BASE_URL . 'frontend/index.html');
-        exit();
-    }
-
 // Function to sanitize input
 function sanitize($input) {
     global $conn;

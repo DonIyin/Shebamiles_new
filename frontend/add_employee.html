@@ -243,19 +243,19 @@
 </main>
 <div class="fixed inset-0 z-50 flex items-center justify-center px-4 overflow-y-auto bg-slate-900/70 backdrop-blur-sm">
 <div class="relative w-full max-w-2xl bg-white dark:bg-slate-900 rounded-2xl shadow-2xl overflow-hidden my-8 border border-slate-200 dark:border-slate-800">
-<div class="px-6 py-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-orange-50/30 dark:bg-orange-900/10">
+<div class="px-8 py-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-orange-50/30 dark:bg-orange-900/10">
 <div class="flex items-center gap-3">
 <div class="bg-primary text-white p-2 rounded-lg shadow-sm shadow-orange-200">
 <span class="material-symbols-outlined block">person_add</span>
 </div>
 <h3 class="text-xl font-bold text-slate-900 dark:text-white">Add New Employee</h3>
 </div>
-<button class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full">
+<button class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full" onclick="document.querySelector('.fixed.inset-0').style.display='none'">
 <span class="material-symbols-outlined">close</span>
 </button>
 </div>
 <div class="p-8">
-<form class="space-y-8">
+<form class="space-y-8" id="addEmployeeForm" onsubmit="handleAddEmployee(event)">
 <div>
 <div class="flex items-center gap-2 mb-4">
 <div class="h-4 w-1 bg-primary rounded-full"></div>
@@ -264,15 +264,15 @@
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
 <div class="space-y-1.5">
 <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">First Name</label>
-<input class="w-full px-4 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm outline-none" placeholder="e.g. John" type="text"/>
+<input class="w-full px-4 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm outline-none" placeholder="e.g. John" type="text" name="first_name" required/>
 </div>
 <div class="space-y-1.5">
 <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Last Name</label>
-<input class="w-full px-4 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm outline-none" placeholder="e.g. Doe" type="text"/>
+<input class="w-full px-4 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm outline-none" placeholder="e.g. Doe" type="text" name="last_name" required/>
 </div>
 <div class="sm:col-span-2 space-y-1.5">
 <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Email Address</label>
-<input class="w-full px-4 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm outline-none" placeholder="john.doe@company.com" type="email"/>
+<input class="w-full px-4 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm outline-none" placeholder="john.doe@company.com" type="email" name="email" required/>
 </div>
 </div>
 </div>
@@ -284,42 +284,108 @@
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
 <div class="space-y-1.5">
 <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Department</label>
-<select class="w-full px-4 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm outline-none">
+<select class="w-full px-4 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm outline-none" name="department" required>
 <option value="">Select department</option>
-<option value="eng">Engineering</option>
-<option value="hr">Human Resources</option>
-<option value="mkt">Marketing</option>
-<option value="sls">Sales</option>
+<option value="Engineering">Engineering</option>
+<option value="Human Resources">Human Resources</option>
+<option value="Marketing">Marketing</option>
+<option value="Sales">Sales</option>
 </select>
 </div>
 <div class="space-y-1.5">
 <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Job Title / Role</label>
-<input class="w-full px-4 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm outline-none" placeholder="e.g. Senior Manager" type="text"/>
+<input class="w-full px-4 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm outline-none" placeholder="e.g. Senior Manager" type="text" name="position" required/>
 </div>
 <div class="space-y-1.5">
 <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Hire Date</label>
 <div class="relative">
 <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-400">calendar_today</span>
-<input class="w-full px-4 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm outline-none appearance-none" type="date"/>
+<input class="w-full px-4 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm outline-none appearance-none" type="date" name="hire_date"/>
 </div>
 </div>
 <div class="space-y-1.5">
 <label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Work Status</label>
-<select class="w-full px-4 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm outline-none">
+<select class="w-full px-4 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm outline-none" name="status">
 <option value="active">Active (On-site)</option>
 <option value="remote">Remote</option>
 <option value="contract">Contractor</option>
 </select>
+</div>
+<div class="space-y-1.5">
+<label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Salary</label>
+<input class="w-full px-4 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm outline-none" placeholder="e.g. 75000" type="number" step="0.01" name="salary"/>
+</div>
+</div>
+<div>
+<div class="flex items-center gap-2 mb-4">
+<div class="h-4 w-1 bg-primary rounded-full"></div>
+<h4 class="text-xs font-bold text-primary uppercase tracking-widest">Contact & Address</h4>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+<div class="space-y-1.5">
+<label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Phone Number</label>
+<input class="w-full px-4 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm outline-none" placeholder="+1 (555) 123-4567" type="tel" name="phone"/>
+</div>
+<div class="space-y-1.5">
+<label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Address</label>
+<input class="w-full px-4 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm outline-none" placeholder="Street address" type="text" name="address"/>
+</div>
+<div class="space-y-1.5">
+<label class="text-sm font-semibold text-slate-700 dark:text-slate-300">City</label>
+<input class="w-full px-4 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm outline-none" placeholder="e.g. San Francisco" type="text" name="city"/>
+</div>
+<div class="space-y-1.5">
+<label class="text-sm font-semibold text-slate-700 dark:text-slate-300">State</label>
+<input class="w-full px-4 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm outline-none" placeholder="e.g. CA" type="text" name="state"/>
+</div>
+<div class="space-y-1.5">
+<label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Postal Code</label>
+<input class="w-full px-4 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm outline-none" placeholder="94105" type="text" name="postal_code"/>
+</div>
+<div class="space-y-1.5">
+<label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Country</label>
+<input class="w-full px-4 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm outline-none" placeholder="e.g. USA" type="text" name="country"/>
+</div>
+</div>
+</div>
+<div>
+<div class="flex items-center gap-2 mb-4">
+<div class="h-4 w-1 bg-primary rounded-full"></div>
+<h4 class="text-xs font-bold text-primary uppercase tracking-widest">Emergency Contact</h4>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+<div class="space-y-1.5">
+<label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Contact Name</label>
+<input class="w-full px-4 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm outline-none" placeholder="Full name" type="text" name="emergency_contact_name"/>
+</div>
+<div class="space-y-1.5">
+<label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Relationship</label>
+<input class="w-full px-4 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm outline-none" placeholder="e.g. Spouse, Parent" type="text" name="emergency_contact_relation"/>
+</div>
+<div class="sm:col-span-2 space-y-1.5">
+<label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Contact Phone</label>
+<input class="w-full px-4 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm outline-none" placeholder="+1 (555) 987-6543" type="tel" name="emergency_contact_phone"/>
+</div>
+</div>
+</div>
+<div>
+<div class="flex items-center gap-2 mb-4">
+<div class="h-4 w-1 bg-primary rounded-full"></div>
+<h4 class="text-xs font-bold text-primary uppercase tracking-widest">Bio</h4>
+</div>
+<div class="space-y-1.5">
+<label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Employee Bio (Optional)</label>
+<textarea class="w-full px-4 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm outline-none" placeholder="Brief bio or professional summary" rows="4" name="bio"></textarea>
 </div>
 </div>
 </div>
 </form>
 </div>
 <div class="px-8 py-6 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-end gap-3 bg-slate-50/30 dark:bg-slate-800/20">
-<button class="w-full sm:w-auto px-6 py-2.5 rounded-lg font-bold text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors border border-slate-200 dark:border-slate-700">
+<button class="w-full sm:w-auto px-6 py-2.5 rounded-lg font-bold text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors border border-slate-200 dark:border-slate-700" type="button" onclick="document.querySelector('.fixed.inset-0').style.display='none'">
                 Cancel
             </button>
-<button class="w-full sm:w-auto px-10 py-2.5 rounded-lg font-bold text-sm bg-primary hover:bg-primary-hover text-white shadow-lg shadow-orange-200 dark:shadow-none transition-all">
+<button class="w-full sm:w-auto px-10 py-2.5 rounded-lg font-bold text-sm bg-primary hover:bg-primary-hover text-white shadow-lg shadow-orange-200 dark:shadow-none transition-all" type="submit">
                 Create Employee Profile
             </button>
 </div>
@@ -327,4 +393,39 @@
 </div>
 
 <script src="index.js"></script>
+<script>
+async function handleAddEmployee(e) {
+  e.preventDefault();
+  
+  const form = e.target;
+  const formData = new FormData(form);
+  formData.append('action', 'create');
+  
+  try {
+    const response = await fetch('../backend/employee_create_api.php', {
+      method: 'POST',
+      body: formData
+    });
+    
+    const data = await response.json();
+    
+    if (data.success) {
+      showToast('Employee created successfully!', 'success');
+      form.reset();
+      document.querySelector('.fixed.inset-0').style.display = 'none';
+      setTimeout(() => window.location.reload(), 1500);
+    } else {
+      showToast(data.message || 'Failed to create employee', 'error');
+    }
+  } catch (error) {
+    showToast('Network error: ' + error.message, 'error');
+  }
+}
+
+// Make form visible on page load
+document.addEventListener('DOMContentLoaded', () => {
+  const modal = document.querySelector('.fixed.inset-0');
+  if (modal) modal.style.display = 'flex';
+});
+</script>
 </body></html>

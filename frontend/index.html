@@ -69,10 +69,10 @@
         }
     </style>
 </head>
-<body class="min-h-screen bg-image">
+<body class="min-h-screen bg-image flex flex-col">
     
     <!-- Main Container -->
-    <div class="min-h-screen flex items-center justify-center p-4">
+    <div class="flex-1 flex items-center justify-center p-4">
         <div class="w-full max-w-6xl grid lg:grid-cols-2 gap-8 items-center">
             
             <!-- Left Side - Branding & Info -->
@@ -188,7 +188,7 @@
                                 <input id="remember" type="checkbox" class="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary">
                                 <span class="text-sm text-gray-600">Remember me</span>
                             </label>
-                            <a href="#" class="text-sm font-semibold text-primary hover:text-primary-dark transition-colors">
+                            <a href="forgot_password.html" class="text-sm font-semibold text-primary hover:text-primary-dark transition-colors">
                                 Forgot password?
                             </a>
                         </div>
@@ -260,11 +260,13 @@
     </div>
     
     <!-- Footer -->
-    <div class="fixed bottom-0 left-0 right-0 p-4 text-center">
-        <p class="text-white text-sm backdrop-blur-sm bg-black/20 inline-block px-6 py-2 rounded-full">
-            © 2026 Shebamiles. All rights reserved.
-        </p>
-    </div>
+    <footer class="border-t border-white/20 bg-black/30 backdrop-blur-sm">
+        <div class="max-w-6xl mx-auto px-4 py-6 text-center">
+            <p class="text-white text-sm">
+                © 2026 Shebamiles. All rights reserved.
+            </p>
+        </div>
+    </footer>
 
     <script src="index.js"></script>
     <script src="auth.js"></script>

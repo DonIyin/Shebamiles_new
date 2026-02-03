@@ -64,9 +64,9 @@
 <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-12 border-2 border-primary" data-alt="Professional headshot of a smiling employee" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDEUw3SXv9uDQWexxKNOP6WEtV_UOVIWCKJrtxq9gEEKAFHguWDSyBc28C_NG9PWupO1rogWbMCYIwuVHCoCCfAT-VFeNMbpZ3CUMg4tyx3WHXDTsLuiqVqgTLKkM04PJnv93PwNDm8Dj01jtjmqgmq_9gNun89_rmrim-dffalX8d9Lad-zmHEi0llR-Fu3RapqT5cK5M2TMVxk31ri7eCbpGwMslzZwTuxosZRyTTq25yHg32YtXZzkE0xSA5x2diTvseIMTjAVAu");'>
 </div>
 <div class="flex flex-col">
-<h1 class="text-[#1b140d] dark:text-white text-base font-bold leading-tight">John Doe</h1>
-<p class="text-[#9a734c] dark:text-[#c5a484] text-xs font-medium">Senior Developer</p>
-<p class="text-[#9a734c] dark:text-[#c5a484] text-[10px] uppercase tracking-wider">Engineering</p>
+<h1 id="sidebarFullName" class="text-[#1b140d] dark:text-white text-base font-bold leading-tight">—</h1>
+<p id="sidebarPosition" class="text-[#9a734c] dark:text-[#c5a484] text-xs font-medium">—</p>
+<p id="sidebarDepartment" class="text-[#9a734c] dark:text-[#c5a484] text-[10px] uppercase tracking-wider">—</p>
 </div>
 </div>
 </div>
@@ -76,7 +76,7 @@
 <span class="material-symbols-outlined">dashboard</span>
 <span class="text-sm font-medium">Dashboard</span>
 </a>
-<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-[#1b140d] dark:text-[#f3ede7] hover:bg-background-light dark:hover:bg-[#3d2e21] transition-colors" href="add_employee.html">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-[#1b140d] dark:text-[#f3ede7] hover:bg-background-light dark:hover:bg-[#3d2e21] transition-colors" href="employee_profile.html">
 <span class="material-symbols-outlined">person</span>
 <span class="text-sm font-medium">My Profile</span>
 </a>
@@ -99,7 +99,7 @@
 <span class="material-symbols-outlined">settings</span>
 <span class="text-sm font-medium">Settings</span>
 </a>
-<button class="flex items-center justify-center gap-2 w-full py-2.5 rounded-lg bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-400 text-sm font-bold border border-red-100 dark:border-red-900/30 transition-all hover:bg-red-100">
+<button class="flex items-center justify-center gap-2 w-full py-2.5 rounded-lg bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-400 text-sm font-bold border border-red-100 dark:border-red-900/30 transition-all hover:bg-red-100" onclick="window.location.href='../backend/logout.php'">
 <span class="material-symbols-outlined text-sm">logout</span>
                 Sign Out
             </button>
@@ -139,7 +139,7 @@
 </div>
 <div class="bg-white dark:bg-[#2d2218] px-4 py-2 rounded-xl shadow-sm border border-[#f3ede7] dark:border-[#3d2e21] flex items-center gap-2">
 <span class="material-symbols-outlined text-primary">event</span>
-<span class="text-sm font-semibold">Monday, October 23, 2023</span>
+<span class="text-sm font-semibold">Tuesday, February 3, 2026</span>
 </div>
 </div>
 <!-- Hero: Clock In Widget -->
@@ -221,8 +221,8 @@
 <span class="material-symbols-outlined">description</span>
 </div>
 <div>
-<p class="text-sm font-bold">September 2023</p>
-<p class="text-xs text-[#9a734c] dark:text-[#c5a484]">Processed on Oct 01</p>
+<p class="text-sm font-bold">February 2026</p>
+<p class="text-xs text-[#9a734c] dark:text-[#c5a484]">Processed on Feb 01</p>
 </div>
 </div>
 <div class="flex items-center gap-4">
@@ -239,8 +239,8 @@
 <span class="material-symbols-outlined">description</span>
 </div>
 <div>
-<p class="text-sm font-bold">August 2023</p>
-<p class="text-xs text-[#9a734c] dark:text-[#c5a484]">Processed on Sep 01</p>
+<p class="text-sm font-bold">January 2026</p>
+<p class="text-xs text-[#9a734c] dark:text-[#c5a484]">Processed on Jan 01</p>
 </div>
 </div>
 <div class="flex items-center gap-4">
@@ -257,8 +257,8 @@
 <span class="material-symbols-outlined">description</span>
 </div>
 <div>
-<p class="text-sm font-bold">July 2023</p>
-<p class="text-xs text-[#9a734c] dark:text-[#c5a484]">Processed on Aug 01</p>
+<p class="text-sm font-bold">January 2026 (Adjustment)</p>
+<p class="text-xs text-[#9a734c] dark:text-[#c5a484]">Processed on Jan 20</p>
 </div>
 </div>
 <div class="flex items-center gap-4">
@@ -307,7 +307,7 @@
 <p class="text-xs text-[#9a734c] dark:text-[#c5a484] mt-1">Connect the time tracking API to the frontend widget.</p>
 <div class="mt-2 flex items-center gap-2 text-[10px] text-[#9a734c] dark:text-[#c5a484] font-medium">
 <span class="material-symbols-outlined text-xs">calendar_month</span>
-                                    Oct 25, 2023
+                                    Feb 6, 2026
                                 </div>
 </div>
 </div>
@@ -335,4 +335,22 @@
 </div>
 <script src="index.js"></script>
 <script src="dashboard.js"></script>
+<script>
+  async function loadSidebarProfile() {
+    try {
+      const response = await fetch('../backend/employee_profile_api.php');
+      const data = await response.json();
+      if (data.success) {
+        const p = data.profile;
+        const fullName = `${p.first_name || ''} ${p.last_name || ''}`.trim() || 'Employee';
+        document.getElementById('sidebarFullName').textContent = fullName;
+        document.getElementById('sidebarPosition').textContent = p.position || p.role || '—';
+        document.getElementById('sidebarDepartment').textContent = (p.department || '—').toUpperCase();
+      }
+    } catch (error) {
+      // Silent fail
+    }
+  }
+  document.addEventListener('DOMContentLoaded', loadSidebarProfile);
+</script>
 </body></html>
