@@ -46,6 +46,15 @@
         .skeleton {
             animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
         }
+
+        .embedded aside,
+        .embedded header {
+            display: none !important;
+        }
+
+        .embedded main {
+            margin: 0 !important;
+        }
         
         @keyframes pulse {
             0%, 100% { opacity: 1; }
@@ -256,6 +265,11 @@
         
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('embed') === '1') {
+                document.body.classList.add('embedded');
+            }
+
             DashboardInit.init();
             loadEmployees();
         });
@@ -459,8 +473,8 @@
         
         // View employee
         function viewEmployee(id) {
-            // TODO: Navigate to employee detail page
-            showToast('Employee profile coming soon!', 'info');
+            // Redirect to employee edit/detail page
+            window.location.href = `employee_edit.html?id=${id}`;
         }
     </script>
 </body>

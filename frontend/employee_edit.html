@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Employee Details</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="index.css" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f97316",
+                        "primary-dark": "#ea580c",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101822",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        :root { --primary-color: #f97316; }
+    </style>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;800;900&amp;display=swap" rel="stylesheet"/>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="p-8 max-w-[1200px] mx-auto w-full">
+<div class="mb-8 flex items-center justify-between">
+    <div>
+        <h1 class="text-3xl font-bold mb-2">Employee Details</h1>
+        <p class="text-slate-500 dark:text-slate-400">Edit employee information</p>
+    </div>
+    <button onclick="goBack()" class="px-4 py-2 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-800 flex items-center gap-2">
+        <span class="material-symbols-outlined text-sm">arrow_back</span>Back
+    </button>
+</div>
+
+<form id="employeeForm" class="space-y-6">
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Profile Picture -->
+<div class="lg:col-span-1">
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6">
+    <div class="text-center">
+        <div id="profilePicture" class="w-32 h-32 mx-auto rounded-full bg-gradient-to-br from-primary to-orange-500 flex items-center justify-center text-white text-5xl font-bold mb-4">
+            AB
+        </div>
+        <h2 id="employeeName" class="text-xl font-bold mb-1">Loading...</h2>
+        <p id="employeePosition" class="text-slate-500 dark:text-slate-400 text-sm mb-6">Position</p>
+        
+        <div class="space-y-2">
+            <div class="text-left">
+                <label class="block text-xs font-medium mb-2">Status</label>
+                <select id="statusField" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-sm">
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                    <option value="on_leave">On Leave</option>
+                    <option value="suspended">Suspended</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- Main Information -->
+<div class="lg:col-span-2 space-y-6">
+<!-- Personal Information -->
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6">
+<h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+    <span class="material-symbols-outlined text-primary">person</span>Personal Information
+</h3>
+<div class="grid grid-cols-2 gap-4">
+    <div>
+        <label class="block text-sm font-medium mb-2">First Name</label>
+        <input type="text" id="firstNameField" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800" placeholder="First Name"/>
+    </div>
+    <div>
+        <label class="block text-sm font-medium mb-2">Last Name</label>
+        <input type="text" id="lastNameField" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800" placeholder="Last Name"/>
+    </div>
+    <div>
+        <label class="block text-sm font-medium mb-2">Email</label>
+        <input type="email" id="emailField" disabled class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-slate-50 dark:bg-slate-800" placeholder="Email"/>
+    </div>
+    <div>
+        <label class="block text-sm font-medium mb-2">Phone</label>
+        <input type="tel" id="phoneField" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800" placeholder="Phone"/>
+    </div>
+</div>
+</div>
+
+<!-- Employment Information -->
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6">
+<h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+    <span class="material-symbols-outlined text-primary">work</span>Employment Information
+</h3>
+<div class="grid grid-cols-2 gap-4">
+    <div>
+        <label class="block text-sm font-medium mb-2">Employee Code</label>
+        <input type="text" id="employeeCodeField" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800" placeholder="EMP001"/>
+    </div>
+    <div>
+        <label class="block text-sm font-medium mb-2">Department</label>
+        <input type="text" id="departmentField" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800" placeholder="Engineering"/>
+    </div>
+    <div>
+        <label class="block text-sm font-medium mb-2">Position</label>
+        <input type="text" id="positionField" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800" placeholder="Software Engineer"/>
+    </div>
+    <div>
+        <label class="block text-sm font-medium mb-2">Salary</label>
+        <input type="number" id="salaryField" step="0.01" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800" placeholder="0.00"/>
+    </div>
+    <div>
+        <label class="block text-sm font-medium mb-2">Hire Date</label>
+        <input type="date" id="hireDateField" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800"/>
+    </div>
+</div>
+</div>
+
+<!-- Address Information -->
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6">
+<h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+    <span class="material-symbols-outlined text-primary">location_on</span>Address Information
+</h3>
+<div class="space-y-4">
+    <div>
+        <label class="block text-sm font-medium mb-2">Address</label>
+        <input type="text" id="addressField" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800" placeholder="Street Address"/>
+    </div>
+    <div class="grid grid-cols-2 gap-4">
+        <div>
+            <label class="block text-sm font-medium mb-2">City</label>
+            <input type="text" id="cityField" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800" placeholder="City"/>
+        </div>
+        <div>
+            <label class="block text-sm font-medium mb-2">State</label>
+            <input type="text" id="stateField" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800" placeholder="State"/>
+        </div>
+    </div>
+    <div class="grid grid-cols-2 gap-4">
+        <div>
+            <label class="block text-sm font-medium mb-2">Postal Code</label>
+            <input type="text" id="postalCodeField" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800" placeholder="Postal Code"/>
+        </div>
+        <div>
+            <label class="block text-sm font-medium mb-2">Country</label>
+            <input type="text" id="countryField" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800" placeholder="Country"/>
+        </div>
+    </div>
+</div>
+</div>
+
+<!-- Emergency Contact -->
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6">
+<h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+    <span class="material-symbols-outlined text-primary">emergency_share</span>Emergency Contact
+</h3>
+<div class="grid grid-cols-2 gap-4">
+    <div>
+        <label class="block text-sm font-medium mb-2">Contact Name</label>
+        <input type="text" id="emergencyNameField" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800" placeholder="Full Name"/>
+    </div>
+    <div>
+        <label class="block text-sm font-medium mb-2">Relationship</label>
+        <input type="text" id="emergencyRelationField" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800" placeholder="Brother/Sister/Parent"/>
+    </div>
+    <div class="col-span-2">
+        <label class="block text-sm font-medium mb-2">Phone Number</label>
+        <input type="tel" id="emergencyPhoneField" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800" placeholder="Phone"/>
+    </div>
+</div>
+</div>
+
+<!-- Bio -->
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6">
+<h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+    <span class="material-symbols-outlined text-primary">description</span>Bio
+</h3>
+<textarea id="bioField" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800" rows="4" placeholder="Employee bio and background..."></textarea>
+</div>
+
+<!-- Action Buttons -->
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6">
+<div class="flex gap-2 justify-end">
+    <button type="button" onclick="goBack()" class="px-6 py-2 border border-slate-200 dark:border-slate-700 rounded-lg font-medium hover:bg-slate-50 dark:hover:bg-slate-800">Cancel</button>
+    <button type="submit" class="px-6 py-2 bg-primary text-white rounded-lg font-medium hover:bg-primary-dark flex items-center gap-2">
+        <span class="material-symbols-outlined text-sm">save</span>Save Changes
+    </button>
+</div>
+</div>
+</div>
+</div>
+</form>
+</div>
+
+<script src="index.js"></script>
+<script src="auth-utils.js"></script>
+<script>
+    // Verify user is admin
+    if (!AuthUtils.requireAdmin()) {
+        throw new Error('Admin access required');
+    }
+    
+    const employeeId = new URLSearchParams(window.location.search).get('id');
+
+    async function loadEmployee() {
+        if (!employeeId) {
+            showToast('No employee selected', 'error');
+            goBack();
+            return;
+        }
+
+        try {
+            const response = await fetch(`../backend/employee_edit_api.php?employee_id=${employeeId}`);
+            const data = await response.json();
+            
+            if (data.success) {
+                populateForm(data.employee);
+            } else {
+                showToast('Employee not found', 'error');
+                goBack();
+            }
+        } catch (error) {
+            console.error('Error loading employee:', error);
+            showToast('Error loading employee', 'error');
+        }
+    }
+
+    function populateForm(employee) {
+        const initials = (employee.first_name[0] + employee.last_name[0]).toUpperCase();
+        document.getElementById('profilePicture').textContent = initials;
+        document.getElementById('employeeName').textContent = `${employee.first_name} ${employee.last_name}`;
+        document.getElementById('employeePosition').textContent = employee.position || 'No Position';
+
+        document.getElementById('firstNameField').value = employee.first_name || '';
+        document.getElementById('lastNameField').value = employee.last_name || '';
+        document.getElementById('emailField').value = employee.email || '';
+        document.getElementById('phoneField').value = employee.phone || '';
+        document.getElementById('employeeCodeField').value = employee.employee_code || '';
+        document.getElementById('departmentField').value = employee.department || '';
+        document.getElementById('positionField').value = employee.position || '';
+        document.getElementById('salaryField').value = employee.salary || '';
+        document.getElementById('hireDateField').value = employee.hire_date || '';
+        document.getElementById('statusField').value = employee.status || 'active';
+        document.getElementById('addressField').value = employee.address || '';
+        document.getElementById('cityField').value = employee.city || '';
+        document.getElementById('stateField').value = employee.state || '';
+        document.getElementById('postalCodeField').value = employee.postal_code || '';
+        document.getElementById('countryField').value = employee.country || '';
+        document.getElementById('emergencyNameField').value = employee.emergency_contact_name || '';
+        document.getElementById('emergencyRelationField').value = employee.emergency_contact_relation || '';
+        document.getElementById('emergencyPhoneField').value = employee.emergency_contact_phone || '';
+        document.getElementById('bioField').value = employee.bio || '';
+    }
+
+    document.getElementById('employeeForm').addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const updateData = {
+            employee_id: parseInt(employeeId),
+            first_name: document.getElementById('firstNameField').value,
+            last_name: document.getElementById('lastNameField').value,
+            phone: document.getElementById('phoneField').value,
+            employee_code: document.getElementById('employeeCodeField').value,
+            department: document.getElementById('departmentField').value,
+            position: document.getElementById('positionField').value,
+            salary: parseFloat(document.getElementById('salaryField').value) || null,
+            hire_date: document.getElementById('hireDateField').value,
+            status: document.getElementById('statusField').value,
+            address: document.getElementById('addressField').value,
+            city: document.getElementById('cityField').value,
+            state: document.getElementById('stateField').value,
+            postal_code: document.getElementById('postalCodeField').value,
+            country: document.getElementById('countryField').value,
+            emergency_contact_name: document.getElementById('emergencyNameField').value,
+            emergency_contact_relation: document.getElementById('emergencyRelationField').value,
+            emergency_contact_phone: document.getElementById('emergencyPhoneField').value,
+            bio: document.getElementById('bioField').value
+        };
+
+        try {
+            const response = await fetch('../backend/employee_edit_api.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updateData)
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                showToast('Employee information updated successfully!', 'success');
+            } else {
+                showToast(result.message || 'Error updating employee', 'error');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            showToast('Error saving changes', 'error');
+        }
+    });
+
+    function goBack() {
+        window.history.back();
+    }
+
+    // Load employee data on page load
+    loadEmployee();
+</script>
+</body></html>

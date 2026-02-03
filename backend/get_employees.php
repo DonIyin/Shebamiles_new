@@ -22,14 +22,17 @@ $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 50;
 $offset = isset($_GET['offset']) ? (int)$_GET['offset'] : 0;
 
 // Build query
-$query = "SELECT user_id, email, username, first_name, last_name, phone, department, role, status, created_at, last_login 
-          FROM users WHERE 1=1";
+$query = "SELECT e.employee_id, e.user_id, e.first_name, e.last_name, e.email, e.phone, e.department, e.position, e.status, e.hire_date, e.profile_picture,
+                 u.username, u.role
+          FROM employees e
+          LEFT JOIN users u ON e.user_id = u.user_id
+          WHERE 1=1";
 
 $params = [];
 $types = '';
 
 if (!empty($search)) {
-    $query .= " AND (first_name LIKE ? OR last_name LIKE ? OR email LIKE ? OR username LIKE ?)";
+    $query .= " AND (e.first_name LIKE ? OR e.last_name LIKE ? OR e.email LIKE ? OR u.username LIKE ?)";
     $searchTerm = "%{$search}%";
     $params[] = $searchTerm;
     $params[] = $searchTerm;
@@ -39,13 +42,13 @@ if (!empty($search)) {
 }
 
 if (!empty($department)) {
-    $query .= " AND department = ?";
+    $query .= " AND e.department = ?";
     $params[] = $department;
     $types .= 's';
 }
 
 if (!empty($status)) {
-    $query .= " AND status = ?";
+    $query .= " AND e.status = ?";
     $params[] = $status;
     $types .= 's';
 }
@@ -67,7 +70,8 @@ $result = $stmt->get_result();
 $employees = [];
 while ($row = $result->fetch_assoc()) {
     $employees[] = [
-        'id' => $row['user_id'],
+        'id' => $row['employee_id'],
+        'user_id' => $row['user_id'],
         'email' => $row['email'],
         'username' => $row['username'],
         'first_name' => $row['first_name'],
@@ -75,20 +79,23 @@ while ($row = $result->fetch_assoc()) {
         'full_name' => $row['first_name'] . ' ' . $row['last_name'],
         'phone' => $row['phone'],
         'department' => $row['department'],
+        'position' => $row['position'],
         'role' => $row['role'],
         'status' => $row['status'],
-        'created_at' => $row['created_at'],
-        'last_login' => $row['last_login']
+        'hire_date' => $row['hire_date'],
+        'profile_picture' => $row['profile_picture']
     ];
 }
 
 // Get total count
-$countQuery = "SELECT COUNT(*) as total FROM users WHERE 1=1";
+$countQuery = "SELECT COUNT(*) as total FROM employees e 
+               LEFT JOIN users u ON e.user_id = u.user_id
+               WHERE 1=1";
 $countParams = [];
 $countTypes = '';
 
 if (!empty($search)) {
-    $countQuery .= " AND (first_name LIKE ? OR last_name LIKE ? OR email LIKE ? OR username LIKE ?)";
+    $countQuery .= " AND (e.first_name LIKE ? OR e.last_name LIKE ? OR e.email LIKE ? OR u.username LIKE ?)";
     $countParams[] = $searchTerm;
     $countParams[] = $searchTerm;
     $countParams[] = $searchTerm;
@@ -97,13 +104,13 @@ if (!empty($search)) {
 }
 
 if (!empty($department)) {
-    $countQuery .= " AND department = ?";
+    $countQuery .= " AND e.department = ?";
     $countParams[] = $department;
     $countTypes .= 's';
 }
 
 if (!empty($status)) {
-    $countQuery .= " AND status = ?";
+    $countQuery .= " AND e.status = ?";
     $countParams[] = $status;
     $countTypes .= 's';
 }
@@ -117,7 +124,7 @@ $countResult = $countStmt->get_result();
 $totalCount = $countResult->fetch_assoc()['total'];
 
 // Get departments list
-$deptQuery = "SELECT DISTINCT department FROM users WHERE department IS NOT NULL AND department != '' ORDER BY department";
+$deptQuery = "SELECT DISTINCT department FROM employees WHERE department IS NOT NULL AND department != '' ORDER BY department";
 $deptResult = $conn->query($deptQuery);
 $departments = [];
 while ($row = $deptResult->fetch_assoc()) {

@@ -54,7 +54,46 @@ if ($conn->query($sql) === TRUE) {
     echo "✗ Error creating users table: " . $conn->error . "<br>";
 }
 
-// Create user_activity table (for logging)
+// Create employees table (detailed employee information)
+$sql = "CREATE TABLE IF NOT EXISTS employees (
+    employee_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL UNIQUE,
+    employee_code VARCHAR(50) UNIQUE,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    phone VARCHAR(20),
+    department VARCHAR(100),
+    position VARCHAR(100),
+    salary DECIMAL(10, 2),
+    hire_date DATE,
+    manager_id INT,
+    status ENUM('active', 'inactive', 'on_leave', 'suspended') DEFAULT 'active',
+    bio TEXT,
+    profile_picture VARCHAR(255),
+    address VARCHAR(255),
+    city VARCHAR(100),
+    state VARCHAR(100),
+    postal_code VARCHAR(20),
+    country VARCHAR(100),
+    emergency_contact_name VARCHAR(100),
+    emergency_contact_phone VARCHAR(20),
+    emergency_contact_relation VARCHAR(50),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (manager_id) REFERENCES employees(employee_id) ON DELETE SET NULL,
+    INDEX (user_id),
+    INDEX (department),
+    INDEX (status),
+    INDEX (employee_code)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
+
+if ($conn->query($sql) === TRUE) {
+    echo "✓ Employees table created successfully<br>";
+} else {
+    echo "✗ Error creating employees table: " . $conn->error . "<br>";
+}
 $sql = "CREATE TABLE IF NOT EXISTS user_activity (
     activity_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,

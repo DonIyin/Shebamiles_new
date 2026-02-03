@@ -18,6 +18,8 @@ define('SESSION_NAME', 'shebamiles_session');
 define('PASSWORD_MIN_LENGTH', 8);
 define('MAX_LOGIN_ATTEMPTS', 5);
 define('LOCKOUT_TIME', 15);  // minutes
+define('API_RATE_LIMIT', 100);  // requests per minute
+define('API_RATE_LIMIT_WINDOW', 60);  // seconds
 
 // Base URL
 define('BASE_URL', 'http://localhost/Shebamiles_new/');
@@ -70,6 +72,44 @@ function requireLogin() {
     }
 }
 
+// Function to check user role
+function requireRole($role) {
+    if (!isLoggedIn()) {
+        http_response_code(401);
+        echo json_encode(['success' => false, 'message' => 'Unauthorized']);
+        exit();
+    }
+    
+    if ($_SESSION['role'] !== $role && $_SESSION['role'] !== 'admin') {
+        http_response_code(403);
+        echo json_encode(['success' => false, 'message' => 'Forbidden - admin access required']);
+        exit();
+    }
+}
+
+// Function to generate CSRF token
+function generateCSRFToken() {
+    if (!isset($_SESSION['csrf_token'])) {
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    }
+    return $_SESSION['csrf_token'];
+}
+
+// Function to validate CSRF token
+function validateCSRFToken($token) {
+    if (!isset($_SESSION['csrf_token'])) {
+        return false;
+    }
+    return hash_equals($_SESSION['csrf_token'], $token);
+}
+
+// Function to redirect to login if not authenticated
+function requireLogin() {
+    if (!isLoggedIn()) {
+        header('Location: ' . BASE_URL . 'frontend/index.html');
+        exit();
+    }
+
 // Function to sanitize input
 function sanitize($input) {
     global $conn;
@@ -112,5 +152,50 @@ function sendEmail($to, $subject, $message) {
     $headers .= "From: noreply@shebamiles.com" . "\r\n";
     
     return mail($to, $subject, $message, $headers);
+}
+
+// Function to get employee info
+function getEmployeeInfo($user_id) {
+    global $conn;
+    $query = "SELECT * FROM employees WHERE user_id = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param('i', $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $result->fetch_assoc();
+}
+
+// Function to get all employees
+function getAllEmployees($limit = 50, $offset = 0) {
+    global $conn;
+    $query = "SELECT e.*, u.username, u.role FROM employees e 
+              LEFT JOIN users u ON e.user_id = u.user_id 
+              ORDER BY e.first_name ASC LIMIT ? OFFSET ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param('ii', $limit, $offset);
+    $stmt->execute();
+    return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+}
+
+// Function to get employees by department
+function getEmployeesByDepartment($department, $limit = 50, $offset = 0) {
+    global $conn;
+    $query = "SELECT e.*, u.username, u.role FROM employees e 
+              LEFT JOIN users u ON e.user_id = u.user_id 
+              WHERE e.department = ? 
+              ORDER BY e.first_name ASC LIMIT ? OFFSET ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param('sii', $department, $limit, $offset);
+    $stmt->execute();
+    return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+}
+
+// Function to get total employee count
+function getTotalEmployeeCount() {
+    global $conn;
+    $query = "SELECT COUNT(*) as total FROM employees";
+    $result = $conn->query($query);
+    $row = $result->fetch_assoc();
+    return $row['total'];
 }
 ?>

@@ -15,7 +15,7 @@ All 12 HTML pages have been enhanced with modern animations and interactive feat
 - ✅ **employee_personalized_dashboard.html** - Animated headers, enhanced buttons, card animations
 - ✅ **employee_personalized_dashboard_1.html** - Animated headers, ripple buttons
 - ✅ **employee_directory_management.html** - Page animations, button hover effects
-- ✅ **employee_directory_orange.html** - Page animations, button hover effects
+- ✅ **add_employee.html** - Page animations, button hover effects
 - ✅ **employee_leave_request_page.html** - Form button animations
 
 ### Attendance Pages

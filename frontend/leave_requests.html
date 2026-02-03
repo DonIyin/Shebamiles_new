@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Leave Requests</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="index.css" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f97316",
+                        "primary-dark": "#ea580c",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101822",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        :root { --primary-color: #f97316; }
+        .status-pending { @apply bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400; }
+        .status-approved { @apply bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400; }
+        .status-rejected { @apply bg-rose-100 text-rose-800 dark:bg-rose-900/30 dark:text-rose-400; }
+        .status-cancelled { @apply bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-400; }
+    </style>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;800;900&amp;display=swap" rel="stylesheet"/>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="p-8 max-w-[1400px] mx-auto w-full">
+<div class="mb-8">
+    <h1 class="text-3xl font-bold mb-2">Leave Requests</h1>
+    <p class="text-slate-500 dark:text-slate-400">Manage employee leave applications</p>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
+<div class="lg:col-span-3">
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6">
+<div class="flex items-center justify-between mb-6">
+    <h2 class="text-xl font-bold">Leave Applications</h2>
+    <select id="statusFilter" class="px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-sm">
+        <option value="">All Statuses</option>
+        <option value="pending">Pending</option>
+        <option value="approved">Approved</option>
+        <option value="rejected">Rejected</option>
+        <option value="cancelled">Cancelled</option>
+    </select>
+</div>
+
+<div class="overflow-x-auto">
+<table class="w-full text-sm">
+    <thead>
+        <tr class="border-b border-slate-200 dark:border-slate-700">
+            <th class="px-6 py-3 text-left font-semibold text-slate-600 dark:text-slate-400">Employee</th>
+            <th class="px-6 py-3 text-left font-semibold text-slate-600 dark:text-slate-400">Leave Type</th>
+            <th class="px-6 py-3 text-left font-semibold text-slate-600 dark:text-slate-400">From - To</th>
+            <th class="px-6 py-3 text-left font-semibold text-slate-600 dark:text-slate-400">Days</th>
+            <th class="px-6 py-3 text-left font-semibold text-slate-600 dark:text-slate-400">Status</th>
+            <th class="px-6 py-3 text-left font-semibold text-slate-600 dark:text-slate-400">Action</th>
+        </tr>
+    </thead>
+    <tbody id="leaveTableBody">
+        <tr class="border-b border-slate-200 dark:border-slate-700">
+            <td colspan="6" class="px-6 py-4 text-center text-slate-400">Loading...</td>
+        </tr>
+    </tbody>
+</table>
+</div>
+</div>
+</div>
+
+<div class="lg:col-span-1">
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 h-fit sticky top-8">
+<h3 class="font-bold mb-4">Leave Summary</h3>
+<div class="space-y-3 text-sm">
+    <div class="flex justify-between">
+        <span class="text-slate-600 dark:text-slate-400">Pending</span>
+        <span class="font-bold text-amber-600" id="pendingCount">0</span>
+    </div>
+    <div class="flex justify-between">
+        <span class="text-slate-600 dark:text-slate-400">Approved</span>
+        <span class="font-bold text-emerald-600" id="approvedCount">0</span>
+    </div>
+    <div class="flex justify-between">
+        <span class="text-slate-600 dark:text-slate-400">Rejected</span>
+        <span class="font-bold text-rose-600" id="rejectedCount">0</span>
+    </div>
+    <div class="mt-6 pt-6 border-t border-slate-200 dark:border-slate-700">
+        <button onclick="showRequestModal()" class="w-full px-4 py-2 bg-primary text-white rounded-lg font-medium text-sm hover:bg-primary-dark transition-colors">
+            <span class="material-symbols-outlined text-sm mr-2 inline">add</span>New Request
+        </button>
+    </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Leave Request Modal -->
+<div id="leaveModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+<div class="bg-white dark:bg-slate-900 rounded-xl max-w-md w-full mx-4 p-6">
+    <h3 class="text-xl font-bold mb-4">New Leave Request</h3>
+    <form onsubmit="submitLeaveRequest(event)" class="space-y-4">
+        <div>
+            <label class="block text-sm font-medium mb-2">Employee</label>
+            <select id="leaveEmployeeSelect" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800" required>
+                <option value="">Select Employee</option>
+            </select>
+        </div>
+        <div>
+            <label class="block text-sm font-medium mb-2">Leave Type</label>
+            <select id="leaveTypeSelect" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800" required>
+                <option value="annual">Annual Leave</option>
+                <option value="sick">Sick Leave</option>
+                <option value="personal">Personal Leave</option>
+                <option value="maternity">Maternity Leave</option>
+                <option value="emergency">Emergency Leave</option>
+            </select>
+        </div>
+        <div>
+            <label class="block text-sm font-medium mb-2">From Date</label>
+            <input type="date" id="leaveStartDate" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800" required/>
+        </div>
+        <div>
+            <label class="block text-sm font-medium mb-2">To Date</label>
+            <input type="date" id="leaveEndDate" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800" required/>
+        </div>
+        <div>
+            <label class="block text-sm font-medium mb-2">Reason</label>
+            <textarea id="leaveReason" class="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-sm" rows="3"></textarea>
+        </div>
+        <div class="flex gap-2 pt-4">
+            <button type="button" onclick="hideLeaveModal()" class="flex-1 px-4 py-2 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-800">Cancel</button>
+            <button type="submit" class="flex-1 px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary-dark">Submit</button>
+        </div>
+    </form>
+</div>
+</div>
+
+<script src="index.js"></script>
+<script src="auth-utils.js"></script>
+<script>
+    // Verify user is admin
+    if (!AuthUtils.requireAdmin()) {
+        throw new Error('Admin access required');
+    }
+    
+    const statusFilter = document.getElementById('statusFilter');
+    const leaveTableBody = document.getElementById('leaveTableBody');
+
+    async function loadLeaveRequests() {
+        const status = statusFilter.value;
+        
+        try {
+            let url = '../backend/leave_api.php';
+            if (status) url += `?status=${status}`;
+            
+            const response = await fetch(url);
+            const data = await response.json();
+            
+            if (data.success) {
+                renderLeaveTable(data.requests);
+                updateSummary(data.requests);
+            }
+        } catch (error) {
+            console.error('Error loading leave requests:', error);
+        }
+    }
+
+    function renderLeaveTable(requests) {
+        if (requests.length === 0) {
+            leaveTableBody.innerHTML = '<tr><td colspan="6" class="px-6 py-4 text-center text-slate-400">No requests found</td></tr>';
+            return;
+        }
+
+        leaveTableBody.innerHTML = requests.map(req => `
+            <tr class="border-b border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                <td class="px-6 py-4 font-medium">${req.first_name} ${req.last_name}</td>
+                <td class="px-6 py-4 capitalize">${req.leave_type.replace('_', ' ')}</td>
+                <td class="px-6 py-4 text-sm">
+                    ${new Date(req.start_date).toLocaleDateString()} - ${new Date(req.end_date).toLocaleDateString()}
+                </td>
+                <td class="px-6 py-4">${req.duration_days} days</td>
+                <td class="px-6 py-4">
+                    <span class="status-${req.status} px-3 py-1 rounded-full text-xs font-semibold">
+                        ${req.status.charAt(0).toUpperCase() + req.status.slice(1)}
+                    </span>
+                </td>
+                <td class="px-6 py-4">
+                    ${req.status === 'pending' ? `
+                        <div class="flex gap-2">
+                            <button onclick="approveLeave(${req.leave_id})" class="text-emerald-600 hover:text-emerald-700 text-sm font-medium">Approve</button>
+                            <button onclick="rejectLeave(${req.leave_id})" class="text-rose-600 hover:text-rose-700 text-sm font-medium">Reject</button>
+                        </div>
+                    ` : `
+                        <button onclick="viewLeave(${req.leave_id})" class="text-primary hover:text-primary-dark text-sm font-medium">View</button>
+                    `}
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    function updateSummary(requests) {
+        const summary = {
+            pending: 0,
+            approved: 0,
+            rejected: 0
+        };
+
+        requests.forEach(r => {
+            if (summary.hasOwnProperty(r.status)) {
+                summary[r.status]++;
+            }
+        });
+
+        document.getElementById('pendingCount').textContent = summary.pending;
+        document.getElementById('approvedCount').textContent = summary.approved;
+        document.getElementById('rejectedCount').textContent = summary.rejected;
+    }
+
+    async function loadEmployees() {
+        try {
+            const response = await fetch('../backend/get_employees.php');
+            const data = await response.json();
+            
+            if (data.success) {
+                const select = document.getElementById('leaveEmployeeSelect');
+                select.innerHTML = '<option value="">Select Employee</option>';
+                data.employees.forEach(emp => {
+                    select.innerHTML += `<option value="${emp.id}">${emp.full_name}</option>`;
+                });
+            }
+        } catch (error) {
+            console.error('Error loading employees:', error);
+        }
+    }
+
+    function showRequestModal() {
+        document.getElementById('leaveModal').classList.remove('hidden');
+    }
+
+    function hideLeaveModal() {
+        document.getElementById('leaveModal').classList.add('hidden');
+    }
+
+    async function submitLeaveRequest(event) {
+        event.preventDefault();
+        
+        const employeeId = document.getElementById('leaveEmployeeSelect').value;
+        const leaveType = document.getElementById('leaveTypeSelect').value;
+        const startDate = document.getElementById('leaveStartDate').value;
+        const endDate = document.getElementById('leaveEndDate').value;
+        const reason = document.getElementById('leaveReason').value;
+
+        try {
+            const response = await fetch('../backend/leave_api.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    employee_id: parseInt(employeeId),
+                    leave_type: leaveType,
+                    start_date: startDate,
+                    end_date: endDate,
+                    reason: reason
+                })
+            });
+
+            const data = await response.json();
+            if (data.success) {
+                showToast('Leave request submitted successfully!', 'success');
+                hideLeaveModal();
+                loadLeaveRequests();
+                event.target.reset();
+            } else {
+                showToast(data.message || 'Error submitting request', 'error');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            showToast('Error submitting leave request', 'error');
+        }
+    }
+
+    function approveLeave(leaveId) {
+        if (confirm('Approve this leave request?')) {
+            updateLeaveStatus(leaveId, 'approved');
+        }
+    }
+
+    function rejectLeave(leaveId) {
+        if (confirm('Reject this leave request?')) {
+            updateLeaveStatus(leaveId, 'rejected');
+        }
+    }
+
+    async function updateLeaveStatus(leaveId, status) {
+        try {
+            const response = await fetch('../backend/leave_api.php', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    leave_id: leaveId,
+                    status: status
+                })
+            });
+
+            const data = await response.json();
+            if (data.success) {
+                showToast(`Leave request ${status}!`, 'success');
+                loadLeaveRequests();
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    function viewLeave(leaveId) {
+        loadLeaveDetails(leaveId);
+    }
+
+    async function loadLeaveDetails(leaveId) {
+        try {
+            const response = await fetch(`../backend/leave_api.php?id=${leaveId}`);
+            const data = await response.json();
+            
+            if (data.success) {
+                const leave = data.request;
+                const modal = document.getElementById('viewLeaveModal');
+                
+                document.getElementById('viewLeaveEmployee').textContent = `${leave.first_name} ${leave.last_name}`;
+                document.getElementById('viewLeaveType').textContent = leave.leave_type.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
+                document.getElementById('viewLeaveStartDate').textContent = new Date(leave.start_date).toLocaleDateString();
+                document.getElementById('viewLeaveEndDate').textContent = new Date(leave.end_date).toLocaleDateString();
+                document.getElementById('viewLeaveDuration').textContent = `${leave.duration_days} days`;
+                document.getElementById('viewLeaveReason').textContent = leave.reason || 'No reason provided';
+                document.getElementById('viewLeaveStatus').innerHTML = `<span class="status-${leave.status} px-3 py-1 rounded-full text-xs font-semibold">${leave.status.charAt(0).toUpperCase() + leave.status.slice(1)}</span>`;
+                document.getElementById('viewLeaveReviewedBy').textContent = leave.reviewer_name || 'Not reviewed';
+                document.getElementById('viewLeaveReviewComments').textContent = leave.reviewer_comments || 'No comments';
+                document.getElementById('viewLeaveSubmittedDate').textContent = new Date(leave.created_at).toLocaleDateString();
+                
+                // Show action buttons only if pending
+                const actionButtons = document.getElementById('viewLeaveActionButtons');
+                if (leave.status === 'pending') {
+                    actionButtons.innerHTML = `
+                        <button onclick="approveLeave(${leaveId})" class="flex-1 bg-emerald-500 text-white py-2 rounded-lg font-medium hover:bg-emerald-600 transition">Approve</button>
+                        <button onclick="rejectLeave(${leaveId})" class="flex-1 bg-rose-500 text-white py-2 rounded-lg font-medium hover:bg-rose-600 transition">Reject</button>
+                    `;
+                } else {
+                    actionButtons.innerHTML = `
+                        <button type="button" onclick="closeViewLeaveModal()" class="w-full bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-white py-2 rounded-lg font-medium hover:bg-slate-300 dark:hover:bg-slate-600 transition">Close</button>
+                    `;
+                }
+                
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            } else {
+                showToast('Unable to load leave details', 'error');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            showToast('Error loading leave details', 'error');
+        }
+    }
+
+    function closeViewLeaveModal() {
+        document.getElementById('viewLeaveModal').classList.add('hidden');
+        document.getElementById('viewLeaveModal').classList.remove('flex');
+    }
+
+    statusFilter.addEventListener('change', loadLeaveRequests);
+
+    // Initial load
+    loadEmployees();
+    loadLeaveRequests();
+</script>
+
+<!-- View Leave Details Modal -->
+<div id="viewLeaveModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white dark:bg-slate-900 rounded-xl shadow-xl max-w-2xl w-full mx-4">
+        <div class="flex items-center justify-between p-6 border-b border-slate-200 dark:border-slate-800">
+            <h3 class="text-lg font-bold">Leave Request Details</h3>
+            <button onclick="closeViewLeaveModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+
+        <div class="p-6 space-y-6">
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="text-sm font-medium text-slate-600 dark:text-slate-400">Employee</label>
+                    <p class="text-lg font-semibold mt-1" id="viewLeaveEmployee">-</p>
+                </div>
+                <div>
+                    <label class="text-sm font-medium text-slate-600 dark:text-slate-400">Leave Type</label>
+                    <p class="text-lg font-semibold mt-1" id="viewLeaveType">-</p>
+                </div>
+                <div>
+                    <label class="text-sm font-medium text-slate-600 dark:text-slate-400">From Date</label>
+                    <p class="text-lg font-semibold mt-1" id="viewLeaveStartDate">-</p>
+                </div>
+                <div>
+                    <label class="text-sm font-medium text-slate-600 dark:text-slate-400">To Date</label>
+                    <p class="text-lg font-semibold mt-1" id="viewLeaveEndDate">-</p>
+                </div>
+                <div>
+                    <label class="text-sm font-medium text-slate-600 dark:text-slate-400">Duration</label>
+                    <p class="text-lg font-semibold mt-1" id="viewLeaveDuration">-</p>
+                </div>
+                <div>
+                    <label class="text-sm font-medium text-slate-600 dark:text-slate-400">Status</label>
+                    <div class="mt-1" id="viewLeaveStatus">-</div>
+                </div>
+            </div>
+
+            <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg">
+                <label class="text-sm font-medium text-slate-600 dark:text-slate-400">Reason for Leave</label>
+                <p class="mt-2" id="viewLeaveReason">-</p>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="text-sm font-medium text-slate-600 dark:text-slate-400">Submitted Date</label>
+                    <p class="mt-1" id="viewLeaveSubmittedDate">-</p>
+                </div>
+                <div>
+                    <label class="text-sm font-medium text-slate-600 dark:text-slate-400">Reviewed By</label>
+                    <p class="mt-1" id="viewLeaveReviewedBy">-</p>
+                </div>
+            </div>
+
+            <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg">
+                <label class="text-sm font-medium text-slate-600 dark:text-slate-400">Reviewer Comments</label>
+                <p class="mt-2" id="viewLeaveReviewComments">-</p>
+            </div>
+
+            <div class="flex gap-3 pt-4 border-t border-slate-200 dark:border-slate-800" id="viewLeaveActionButtons">
+                <button type="button" onclick="closeViewLeaveModal()" class="w-full bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-white py-2 rounded-lg font-medium hover:bg-slate-300 dark:hover:bg-slate-600 transition">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body></html>

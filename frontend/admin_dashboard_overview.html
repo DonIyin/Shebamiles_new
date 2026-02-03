@@ -44,6 +44,20 @@
             background-clip: text;
             letter-spacing: -0.02em;
         }
+        .employee-card {
+            transition: all 0.3s ease;
+        }
+        .employee-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(249, 115, 22, 0.15);
+        }
+        .skeleton {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
     </style>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;800;900&amp;display=swap" rel="stylesheet"/>
 </head>
@@ -53,29 +67,32 @@
 <a class="shebamiles-logo hover:opacity-80 transition-opacity" href="index.html">Shebamiles</a>
 </div>
 <nav class="flex-1 px-4 py-6 flex flex-col gap-2">
-<div class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/10 text-primary">
+<button type="button" id="navOverview" class="w-full text-left flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/10 text-primary transition-colors focus:outline-none">
 <span class="material-symbols-outlined">dashboard</span>
 <p class="text-sm font-semibold">Overview</p>
-</div>
-<a href="employee_list.html" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 cursor-pointer transition-colors">
+</button>
+<button type="button" id="navEmployeeList" class="w-full text-left flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 transition-colors focus:outline-none" onclick="window.location.href='employee_management.html'">
 <span class="material-symbols-outlined">group</span>
 <p class="text-sm font-medium">Employee List</p>
-</a>
-<div class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 cursor-pointer">
+</button>
+<a href="attendance_tracking.html" class="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 transition-colors">
 <span class="material-symbols-outlined">calendar_today</span>
 <p class="text-sm font-medium">Attendance</p>
-</div>
-<div class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 cursor-pointer">
+</a>
+<a href="leave_requests.html" class="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 transition-colors">
 <span class="material-symbols-outlined">pending_actions</span>
 <p class="text-sm font-medium">Leave Requests</p>
-</div>
-<div class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 cursor-pointer">
+</a>
+<a href="performance_management.html" class="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 transition-colors">
 <span class="material-symbols-outlined">trending_up</span>
 <p class="text-sm font-medium">Performance</p>
+</a>
+<div class="mt-auto pt-6 border-t border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 cursor-pointer" onclick="AuthUtils.logout()">
+<span class="material-symbols-outlined">logout</span>
+<p class="text-sm font-medium">Logout</p>
 </div>
-<div class="mt-auto pt-6">
-<div class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 cursor-pointer">
-<span class="material-symbols-outlined">settings</span>
+</div>
 <p class="text-sm font-medium">Settings</p>
 </div>
 </div>
@@ -106,54 +123,55 @@
 <span class="material-symbols-outlined">help</span>
 </button>
 <div class="h-8 w-px bg-slate-200 dark:bg-slate-700 mx-2"></div>
-<button class="px-4 py-2 bg-primary text-white text-sm font-bold rounded-lg hover:bg-primary-dark transition-all flex items-center gap-2 ripple hover-scale">
+<a href="add_employee.html" class="px-4 py-2 bg-primary text-white text-sm font-bold rounded-lg hover:bg-primary-dark transition-all flex items-center gap-2 ripple hover-scale">
 <span class="material-symbols-outlined text-sm">add</span>
-                New Hire
-            </button>
+                Add Employee
+            </a>
 </div>
 </header>
-<div class="p-8 max-w-[1200px] mx-auto w-full">
+<div id="overviewContent" class="p-8 max-w-[1200px] mx-auto w-full">
+<div class="mb-6">
+    <h2 class="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-2">Dashboard Overview</h2>
+    <p class="text-slate-500 dark:text-slate-400">Real-time employee statistics and information</p>
+</div>
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
 <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 rounded-xl shadow-sm hover-lift scroll-reveal">
 <div class="flex items-center justify-between mb-2">
 <p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Total Employees</p>
 <span class="material-symbols-outlined text-primary">groups</span>
 </div>
-<p class="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">1,240</p>
+<p class="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100" id="totalEmployees">0</p>
 <div class="flex items-center gap-1 mt-2">
-<span class="text-emerald-500 text-xs font-bold flex items-center"><span class="material-symbols-outlined text-xs">trending_up</span> 12%</span>
-<span class="text-slate-400 text-xs">vs last month</span>
+<span class="text-emerald-500 text-xs font-bold flex items-center"><span class="material-symbols-outlined text-xs">trending_up</span> Loading...</span>
+<span class="text-slate-400 text-xs">from database</span>
 </div>
 </div>
 <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 rounded-xl shadow-sm hover-lift scroll-reveal delay-100">
 <div class="flex items-center justify-between mb-2">
-<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Present Today</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Active Employees</p>
 <span class="material-symbols-outlined text-emerald-500">check_circle</span>
 </div>
-<p class="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">1,102</p>
+<p class="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100" id="activeEmployees">0</p>
 <div class="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full mt-3">
-<div class="bg-emerald-500 h-1.5 rounded-full" style="width: 88%"></div>
+<div class="bg-emerald-500 h-1.5 rounded-full" id="activeBar" style="width: 0%"></div>
 </div>
-<p class="text-xs text-slate-400 mt-2">88.8% attendance rate</p>
+<p class="text-xs text-slate-400 mt-2" id="activePercent">0% active</p>
 </div>
 <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 rounded-xl shadow-sm hover-lift scroll-reveal delay-200">
 <div class="flex items-center justify-between mb-2">
-<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Absent</p>
-<span class="material-symbols-outlined text-rose-500">person_off</span>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Departments</p>
+<span class="material-symbols-outlined text-blue-500">domain</span>
 </div>
-<p class="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">138</p>
-<p class="text-xs text-rose-500 mt-3 font-medium">12 pending leave approvals</p>
+<p class="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100" id="totalDepts">0</p>
+<p class="text-xs text-slate-500 mt-3 font-medium" id="deptList">Loading...</p>
 </div>
 <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 rounded-xl shadow-sm hover-lift scroll-reveal delay-300">
 <div class="flex items-center justify-between mb-2">
-<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Avg Performance</p>
-<span class="material-symbols-outlined text-amber-500">star</span>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Inactive</p>
+<span class="material-symbols-outlined text-rose-500">person_off</span>
 </div>
-<p class="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">8.4/10</p>
-<div class="flex items-center gap-1 mt-2">
-<span class="text-emerald-500 text-xs font-bold flex items-center"><span class="material-symbols-outlined text-xs">trending_up</span> 0.2</span>
-<span class="text-slate-400 text-xs">vs last quarter</span>
-</div>
+<p class="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100" id="inactiveEmployees">0</p>
+<p class="text-xs text-rose-500 mt-3 font-medium" id="inactiveSummary">Loading...</p>
 </div>
 </div>
 <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm overflow-hidden mb-8">
@@ -293,9 +311,65 @@
 </div>
 </div>
 </div>
-</div>
 </main>
 
 <script src="index.js"></script>
 <script src="dashboard.js"></script>
+<script src="auth-utils.js"></script>
+<script>
+    // Verify user is admin
+    if (!AuthUtils.requireAdmin()) {
+        throw new Error('Admin access required');
+    }
+    
+    const navOverview = document.getElementById('navOverview');
+    const overviewContent = document.getElementById('overviewContent');
+
+    navOverview.addEventListener('click', () => {
+        overviewContent.classList.remove('hidden');
+        navOverview.classList.add('bg-primary/10', 'text-primary');
+        navOverview.classList.remove('text-slate-600', 'dark:text-slate-400');
+    });
+
+    // Load dashboard statistics on page load
+    async function loadDashboardStats() {
+        try {
+            const response = await fetch('../backend/get_employees.php');
+            const data = await response.json();
+            
+            if (data.success) {
+                const allEmployees = data.employees;
+                const total = data.total;
+                const activeCount = allEmployees.filter(e => e.status === 'active').length;
+                const inactiveCount = allEmployees.filter(e => e.status === 'inactive').length;
+                const deptList = data.departments || [];
+                
+                // Update dashboard cards
+                document.getElementById('totalEmployees').textContent = total;
+                document.getElementById('activeEmployees').textContent = activeCount;
+                document.getElementById('inactiveEmployees').textContent = inactiveCount;
+                document.getElementById('totalDepts').textContent = deptList.length;
+                
+                // Update active percentage
+                const activePercent = total > 0 ? Math.round((activeCount / total) * 100) : 0;
+                document.getElementById('activeBar').style.width = activePercent + '%';
+                document.getElementById('activePercent').textContent = activePercent + '% active';
+                
+                // Update department list
+                if (deptList.length > 0) {
+                    document.getElementById('deptList').textContent = deptList.slice(0, 2).join(', ') + (deptList.length > 2 ? '...' : '');
+                }
+                
+                // Update inactive summary
+                const inactivePercent = total > 0 ? Math.round((inactiveCount / total) * 100) : 0;
+                document.getElementById('inactiveSummary').textContent = inactivePercent + '% inactive';
+            }
+        } catch (error) {
+            console.error('Error loading dashboard stats:', error);
+        }
+    }
+
+    // Load stats when page loads
+    loadDashboardStats();
+</script>
 </body></html>

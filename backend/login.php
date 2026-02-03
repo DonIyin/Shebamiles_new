@@ -139,7 +139,7 @@ $redirect = BASE_URL . 'frontend/employee_personalized_dashboard.html';
 if ($user['role'] === 'admin') {
     $redirect = BASE_URL . 'frontend/admin_dashboard_overview.html';
 } elseif ($user['role'] === 'manager') {
-    $redirect = BASE_URL . 'frontend/employee_directory_orange.html';
+    $redirect = BASE_URL . 'frontend/add_employee.html';
 }
 
 http_response_code(200);
