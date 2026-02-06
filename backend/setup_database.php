@@ -4,14 +4,19 @@
  * Run this once to create all necessary tables
  */
 
-$conn = new mysqli('localhost', 'root', '');
+$dbHost = getenv('SHEBAMILES_DB_HOST') ?: 'localhost';
+$dbUser = getenv('SHEBAMILES_DB_USER') ?: 'root';
+$dbPass = getenv('SHEBAMILES_DB_PASS') ?: '';
+$dbName = getenv('SHEBAMILES_DB_NAME') ?: 'shebamiles_db';
+
+$conn = new mysqli($dbHost, $dbUser, $dbPass);
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
 // Create database
-$sql = "CREATE DATABASE IF NOT EXISTS shebamiles_db";
+$sql = "CREATE DATABASE IF NOT EXISTS {$dbName}";
 if ($conn->query($sql) === TRUE) {
     echo "✓ Database created successfully<br>";
 } else {
@@ -19,7 +24,7 @@ if ($conn->query($sql) === TRUE) {
 }
 
 // Select database
-$conn->select_db('shebamiles_db');
+$conn->select_db($dbName);
 $conn->set_charset("utf8mb4");
 
 // Set foreign key checks to 0 temporarily
@@ -29,6 +34,7 @@ $conn->query("SET FOREIGN_KEY_CHECKS=0");
 $sql = "CREATE TABLE IF NOT EXISTS users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(255) UNIQUE NOT NULL,
+    username VARCHAR(100) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
     first_name VARCHAR(100) NOT NULL,
     last_name VARCHAR(100) NOT NULL,
@@ -44,6 +50,7 @@ $sql = "CREATE TABLE IF NOT EXISTS users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     INDEX (email),
+    INDEX (username),
     INDEX (role),
     INDEX (status)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";

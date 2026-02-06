@@ -11,7 +11,7 @@ const DashboardInit = {
     },
 
     checkAuth: function() {
-        const user = localStorage.getItem('shebamiles_user');
+        const user = localStorage.getItem('shebamiles_user') || sessionStorage.getItem('shebamiles_user');
         if (!user) {
             // User not logged in, redirect to login
             window.location.href = 'index.html';
@@ -20,7 +20,7 @@ const DashboardInit = {
     },
 
     loadUserProfile: function() {
-        const userJson = localStorage.getItem('shebamiles_user');
+        const userJson = localStorage.getItem('shebamiles_user') || sessionStorage.getItem('shebamiles_user');
         if (!userJson) return;
 
         const user = JSON.parse(userJson);
@@ -107,11 +107,12 @@ const DashboardInit = {
 
     logout: function() {
         localStorage.removeItem('shebamiles_user');
+        sessionStorage.removeItem('shebamiles_user');
         window.location.href = '../backend/logout.php';
     },
 
     getCurrentUser: function() {
-        const userJson = localStorage.getItem('shebamiles_user');
+        const userJson = localStorage.getItem('shebamiles_user') || sessionStorage.getItem('shebamiles_user');
         return userJson ? JSON.parse(userJson) : null;
     }
 };

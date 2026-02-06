@@ -5,10 +5,10 @@
  */
 
 // Database Configuration
-define('DB_HOST', 'localhost');
-define('DB_USER', 'root');
-define('DB_PASS', '');  // Default XAMPP password is empty
-define('DB_NAME', 'shebamiles_db');
+define('DB_HOST', getenv('SHEBAMILES_DB_HOST') ?: 'localhost');
+define('DB_USER', getenv('SHEBAMILES_DB_USER') ?: 'root');
+define('DB_PASS', getenv('SHEBAMILES_DB_PASS') ?: '');  // Default XAMPP password is empty
+define('DB_NAME', getenv('SHEBAMILES_DB_NAME') ?: 'shebamiles_db');
 
 // Session Configuration
 define('SESSION_TIMEOUT', 3600);  // 1 hour
@@ -22,7 +22,7 @@ define('API_RATE_LIMIT', 100);  // requests per minute
 define('API_RATE_LIMIT_WINDOW', 60);  // seconds
 
 // Base URL
-define('BASE_URL', 'http://localhost/Shebamiles_new/');
+define('BASE_URL', getenv('SHEBAMILES_BASE_URL') ?: 'http://localhost/Shebamiles_new/');
 
 // Create database connection
 try {
@@ -42,6 +42,16 @@ try {
 
 // Start session if not already started
 if (session_status() === PHP_SESSION_NONE) {
+    $cookieParams = session_get_cookie_params();
+    $secureCookie = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+    session_set_cookie_params([
+        'lifetime' => 0,
+        'path' => $cookieParams['path'],
+        'domain' => $cookieParams['domain'],
+        'secure' => $secureCookie,
+        'httponly' => true,
+        'samesite' => 'Lax'
+    ]);
     session_name(SESSION_NAME);
     session_start();
 }

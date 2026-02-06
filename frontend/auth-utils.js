@@ -8,7 +8,7 @@ const AuthUtils = {
      * Get current user from localStorage
      */
     getCurrentUser: function() {
-        const userStr = localStorage.getItem('shebamiles_user');
+        const userStr = localStorage.getItem('shebamiles_user') || sessionStorage.getItem('shebamiles_user');
         return userStr ? JSON.parse(userStr) : null;
     },
 
@@ -72,8 +72,9 @@ const AuthUtils = {
                 method: 'POST'
             });
             
-            // Clear localStorage
+            // Clear storage
             localStorage.removeItem('shebamiles_user');
+            sessionStorage.removeItem('shebamiles_user');
             
             // Redirect to login
             window.location.href = 'index.html';
