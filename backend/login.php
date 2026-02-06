@@ -24,11 +24,12 @@ if (!$input) {
 $username = isset($input['username']) ? sanitize($input['username']) : '';
 $password = isset($input['password']) ? $input['password'] : '';
 $remember = isset($input['remember']) ? (bool)$input['remember'] : false;
+$identifier = $username;
 
 // Validation
-if (empty($username)) {
+if (empty($identifier)) {
     http_response_code(400);
-    echo json_encode(['success' => false, 'message' => 'Please enter your username']);
+    echo json_encode(['success' => false, 'message' => 'Please enter your username or email']);
     exit();
 }
 
@@ -45,7 +46,7 @@ $query = "SELECT COUNT(*) as attempts FROM login_attempts
           WHERE email = ? AND attempt_time > DATE_SUB(NOW(), INTERVAL ? MINUTE)";
 $stmt = $conn->prepare($query);
 $lockout_minutes = LOCKOUT_TIME;
-$stmt->bind_param('si', $username, $lockout_minutes);
+$stmt->bind_param('si', $identifier, $lockout_minutes);
 $stmt->execute();
 $result = $stmt->get_result();
 $row = $result->fetch_assoc();
@@ -57,16 +58,16 @@ if ($row['attempts'] >= MAX_LOGIN_ATTEMPTS) {
     // Log failed attempt
     $query = "INSERT INTO login_attempts (email, ip_address, success) VALUES (?, ?, 0)";
     $stmt = $conn->prepare($query);
-    $stmt->bind_param('ss', $username, $ip_address);
+    $stmt->bind_param('ss', $identifier, $ip_address);
     $stmt->execute();
     
     exit();
 }
 
 // Find user
-$query = "SELECT user_id, email, username, password, first_name, last_name, role, status FROM users WHERE username = ?";
+$query = "SELECT user_id, email, username, password, first_name, last_name, role, status FROM users WHERE username = ? OR email = ?";
 $stmt = $conn->prepare($query);
-$stmt->bind_param('s', $username);
+$stmt->bind_param('ss', $identifier, $identifier);
 $stmt->execute();
 $result = $stmt->get_result();
 
@@ -74,7 +75,7 @@ if ($result->num_rows === 0) {
     // Log failed attempt
     $query = "INSERT INTO login_attempts (email, ip_address, success) VALUES (?, ?, 0)";
     $stmt = $conn->prepare($query);
-    $stmt->bind_param('ss', $username, $ip_address);
+    $stmt->bind_param('ss', $identifier, $ip_address);
     $stmt->execute();
     
     http_response_code(401);
@@ -96,7 +97,7 @@ if (!verifyPassword($password, $user['password'])) {
     // Log failed attempt
     $query = "INSERT INTO login_attempts (email, ip_address, success) VALUES (?, ?, 0)";
     $stmt = $conn->prepare($query);
-    $stmt->bind_param('ss', $username, $ip_address);
+    $stmt->bind_param('ss', $identifier, $ip_address);
     $stmt->execute();
     
     http_response_code(401);
@@ -105,19 +106,12 @@ if (!verifyPassword($password, $user['password'])) {
 }
 
 // Login successful - set session
+session_regenerate_id(true);
 $_SESSION['user_id'] = $user['user_id'];
 $_SESSION['email'] = $user['email'];
 $_SESSION['username'] = $user['username'] ?? '';
 $_SESSION['name'] = $user['first_name'] . ' ' . $user['last_name'];
 $_SESSION['role'] = $user['role'];
-
-// Set remember me cookie (optional)
-if ($remember) {
-    $cookie_token = bin2hex(random_bytes(32));
-    setcookie('remember_token', $cookie_token, time() + (86400 * 30), '/');
-    
-    // Store token in database (optional)
-}
 
 // Update last login
 $query = "UPDATE users SET last_login = NOW() WHERE user_id = ?";
@@ -128,7 +122,7 @@ $stmt->execute();
 // Clear failed login attempts
 $query = "DELETE FROM login_attempts WHERE email = ?";
 $stmt = $conn->prepare($query);
-$stmt->bind_param('s', $username);
+$stmt->bind_param('s', $identifier);
 $stmt->execute();
 
 // Log successful login

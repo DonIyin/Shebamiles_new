@@ -68,8 +68,9 @@ const AuthModule = {
             const data = await response.json();
 
             if (data.success) {
-                // Store user data in localStorage
-                localStorage.setItem('shebamiles_user', JSON.stringify(data.user));
+                // Store user data (persist if "remember me" is checked)
+                const storage = remember ? localStorage : sessionStorage;
+                storage.setItem('shebamiles_user', JSON.stringify(data.user));
                 
                 // Show success message
                 this.showSuccess('Login successful! Redirecting...');
@@ -160,7 +161,7 @@ const AuthModule = {
 
     // Check authentication status
     checkAuthStatus: function() {
-        const user = localStorage.getItem('shebamiles_user');
+        const user = localStorage.getItem('shebamiles_user') || sessionStorage.getItem('shebamiles_user');
         if (!user) {
             // User not logged in, might want to redirect
         }
@@ -186,18 +187,19 @@ const AuthModule = {
     // Logout
     logout: function() {
         localStorage.removeItem('shebamiles_user');
+        sessionStorage.removeItem('shebamiles_user');
         window.location.href = '../backend/logout.php';
     },
 
     // Get current user
     getCurrentUser: function() {
-        const user = localStorage.getItem('shebamiles_user');
+        const user = localStorage.getItem('shebamiles_user') || sessionStorage.getItem('shebamiles_user');
         return user ? JSON.parse(user) : null;
     },
 
     // Check if user is logged in
     isLoggedIn: function() {
-        return localStorage.getItem('shebamiles_user') !== null;
+        return (localStorage.getItem('shebamiles_user') || sessionStorage.getItem('shebamiles_user')) !== null;
     }
 };
 
