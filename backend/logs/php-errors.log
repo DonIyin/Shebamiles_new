@@ -1,0 +1,1 @@
+[08-Feb-2026 17:51:46 Europe/Berlin] PHP Fatal error:  Cannot override final method Exception::getCode() in C:\xampp\htdocs\Shebamiles_new\backend\classes\ApiException.php on line 26

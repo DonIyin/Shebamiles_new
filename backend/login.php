@@ -1,160 +1,214 @@
 <?php
 /**
- * Shebamiles - Login Handler
+ * Shebamiles - Enhanced Login Handler
+ * Implements security best practices:
+ * - Rate limiting for brute force protection
+ * - Secure password hashing
+ * - Session security
+ * - Activity logging
  */
-
-header('Content-Type: application/json');
 
 require_once 'config.php';
 
-// Only allow POST requests
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405);
-    echo json_encode(['success' => false, 'message' => 'Method not allowed']);
-    exit();
-}
-
-// Get JSON input
-$input = json_decode(file_get_contents('php://input'), true);
-
-if (!$input) {
-    $input = $_POST;
-}
-
-$username = isset($input['username']) ? sanitize($input['username']) : '';
-$password = isset($input['password']) ? $input['password'] : '';
-$remember = isset($input['remember']) ? (bool)$input['remember'] : false;
-
-// Validation
-if (empty($username)) {
-    http_response_code(400);
-    echo json_encode(['success' => false, 'message' => 'Please enter your username']);
-    exit();
-}
-
-if (empty($password)) {
-    http_response_code(400);
-    echo json_encode(['success' => false, 'message' => 'Please enter your password']);
-    exit();
-}
-
-$ip_address = $_SERVER['REMOTE_ADDR'];
-
-// Check login attempts (brute force protection)
-$query = "SELECT COUNT(*) as attempts FROM login_attempts 
-          WHERE email = ? AND attempt_time > DATE_SUB(NOW(), INTERVAL ? MINUTE)";
-$stmt = $conn->prepare($query);
-$lockout_minutes = LOCKOUT_TIME;
-$stmt->bind_param('si', $username, $lockout_minutes);
-$stmt->execute();
-$result = $stmt->get_result();
-$row = $result->fetch_assoc();
-
-if ($row['attempts'] >= MAX_LOGIN_ATTEMPTS) {
-    http_response_code(429);
-    echo json_encode(['success' => false, 'message' => 'Too many login attempts. Please try again later.']);
+try {
+    // Only allow POST requests
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        throw new ApiException('Method not allowed', ApiResponse::ERROR, 405);
+    }
     
-    // Log failed attempt
-    $query = "INSERT INTO login_attempts (email, ip_address, success) VALUES (?, ?, 0)";
+    // Get input (JSON or form data)
+    $input = json_decode(file_get_contents('php://input'), true) ?? $_POST;
+    
+    // Get credentials
+    $username = sanitize($input['username'] ?? '');
+    $password = $input['password'] ?? '';
+    $remember = (bool)($input['remember'] ?? false);
+    
+    // Get IP address
+    $ip_address = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+    
+    // ============================================
+    // VALIDATION
+    // ============================================
+    
+    $validator = new RequestValidator($input);
+    $validator->required('username')->minLength(3);
+    $validator->required('password')->minLength(8);
+    
+    if (!$validator->validate()) {
+        throw new ValidationException('Please fill in all required fields', $validator->errors());
+    }
+    
+    // ============================================
+    // RATE LIMITING
+    // ============================================
+    
+    // Check login attempt rate limits
+    if (!RateLimiter::check($ip_address, 'login_attempts', LOGIN_RATE_LIMIT, LOGIN_RATE_LIMIT_WINDOW)) {
+        Logger::security('Login rate limit exceeded', [
+            'ip' => $ip_address,
+            'username' => $username
+        ]);
+        throw new RateLimitException('Too many login attempts. Please try again in 15 minutes.');
+    }
+    
+    // ============================================
+    // USER LOOKUP
+    // ============================================
+    
+    // Query database for user
+    $query = "SELECT user_id, email, password, first_name, last_name, role, status, is_verified 
+             FROM users 
+             WHERE username = ? OR email = ?";
+    
     $stmt = $conn->prepare($query);
-    $stmt->bind_param('ss', $username, $ip_address);
-    $stmt->execute();
+    if (!$stmt) {
+        throw new DatabaseException('Query failed', $conn->error);
+    }
     
-    exit();
-}
-
-// Find user
-$query = "SELECT user_id, email, username, password, first_name, last_name, role, status FROM users WHERE username = ?";
-$stmt = $conn->prepare($query);
-$stmt->bind_param('s', $username);
-$stmt->execute();
-$result = $stmt->get_result();
-
-if ($result->num_rows === 0) {
-    // Log failed attempt
-    $query = "INSERT INTO login_attempts (email, ip_address, success) VALUES (?, ?, 0)";
+    $stmt->bind_param('ss', $username, $username);
+    if (!$stmt->execute()) {
+        throw new DatabaseException('Login query failed', $stmt->error);
+    }
+    
+    $result = $stmt->get_result();
+    $user = $result->fetch_assoc();
+    $stmt->close();
+    
+    // User not found
+    if (!$user) {
+        Logger::warning('Login attempt with non-existent user', [
+            'username' => $username,
+            'ip' => $ip_address
+        ]);
+        
+        // Don't reveal whether account exists
+        throw new UnauthorizedException('Invalid username or password');
+    }
+    
+    // ============================================
+    // ACCOUNT STATUS CHECKS
+    // ============================================
+    
+    // Check if account is active
+    if ($user['status'] !== 'active') {
+        Logger::warning('Login attempt on ' . $user['status'] . ' account', [
+            'user_id' => $user['user_id'],
+            'ip' => $ip_address
+        ]);
+        
+        throw new ForbiddenException('Your account is ' . $user['status'] . '. Please contact support.');
+    }
+    
+    // Check if email is verified (optional step)
+    if (!$user['is_verified']) {
+        Logger::info('Login attempt with unverified account', [
+            'user_id' => $user['user_id']
+        ]);
+        
+        throw new ForbiddenException('Please verify your email before logging in');
+    }
+    
+    // ============================================
+    // PASSWORD VERIFICATION
+    // ============================================
+    
+    // Verify password
+    if (!verifyPassword($password, $user['password'])) {
+        Logger::warning('Failed login attempt', [
+            'user_id' => $user['user_id'],
+            'ip' => $ip_address,
+            'reason' => 'invalid_password'
+        ]);
+        
+        throw new UnauthorizedException('Invalid username or password');
+    }
+    
+    // ============================================
+    // SESSION SETUP
+    // ============================================
+    
+    // Regenerate session ID for security
+    session_regenerate_id(true);
+    
+    // Set session variables
+    $_SESSION['user_id'] = $user['user_id'];
+    $_SESSION['email'] = $user['email'];
+    $_SESSION['name'] = $user['first_name'] . ' ' . $user['last_name'];
+    $_SESSION['role'] = $user['role'];
+    $_SESSION['login_time'] = time();
+    $_SESSION['last_activity'] = time();
+    
+    // ============================================
+    // LAST LOGIN UPDATE
+    // ============================================
+    
+    // Update last login timestamp
+    $query = "UPDATE users SET last_login = NOW() WHERE user_id = ?";
     $stmt = $conn->prepare($query);
-    $stmt->bind_param('ss', $username, $ip_address);
-    $stmt->execute();
+    if ($stmt) {
+        $stmt->bind_param('i', $user['user_id']);
+        $stmt->execute();
+        $stmt->close();
+    }
     
-    http_response_code(401);
-    echo json_encode(['success' => false, 'message' => 'Invalid username or password']);
-    exit();
-}
-
-$user = $result->fetch_assoc();
-
-// Check user status
-if ($user['status'] !== 'active') {
-    http_response_code(403);
-    echo json_encode(['success' => false, 'message' => 'Your account is ' . $user['status']]);
-    exit();
-}
-
-// Verify password
-if (!verifyPassword($password, $user['password'])) {
-    // Log failed attempt
-    $query = "INSERT INTO login_attempts (email, ip_address, success) VALUES (?, ?, 0)";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param('ss', $username, $ip_address);
-    $stmt->execute();
+    // ============================================
+    // ACTIVITY LOGGING
+    // ============================================
     
-    http_response_code(401);
-    echo json_encode(['success' => false, 'message' => 'Invalid username or password']);
-    exit();
-}
-
-// Login successful - set session
-$_SESSION['user_id'] = $user['user_id'];
-$_SESSION['email'] = $user['email'];
-$_SESSION['username'] = $user['username'] ?? '';
-$_SESSION['name'] = $user['first_name'] . ' ' . $user['last_name'];
-$_SESSION['role'] = $user['role'];
-
-// Set remember me cookie (optional)
-if ($remember) {
-    $cookie_token = bin2hex(random_bytes(32));
-    setcookie('remember_token', $cookie_token, time() + (86400 * 30), '/');
-    
-    // Store token in database (optional)
-}
-
-// Update last login
-$query = "UPDATE users SET last_login = NOW() WHERE user_id = ?";
-$stmt = $conn->prepare($query);
-$stmt->bind_param('i', $user['user_id']);
-$stmt->execute();
-
-// Clear failed login attempts
-$query = "DELETE FROM login_attempts WHERE email = ?";
-$stmt = $conn->prepare($query);
-$stmt->bind_param('s', $username);
-$stmt->execute();
-
-// Log successful login
-logActivity($user['user_id'], 'LOGIN', 'Successful login from ' . $ip_address);
-
-// Determine redirect based on role
-$redirect = BASE_URL . 'frontend/employee_personalized_dashboard.html';
-if ($user['role'] === 'admin') {
-    $redirect = BASE_URL . 'frontend/admin_dashboard_overview.html';
-} elseif ($user['role'] === 'manager') {
-    $redirect = BASE_URL . 'frontend/add_employee.html';
-}
-
-http_response_code(200);
-echo json_encode([
-    'success' => true,
-    'message' => 'Login successful!',
-    'user' => [
-        'id' => $user['user_id'],
-        'username' => $user['username'] ?? '',
+    // Log successful login
+    logActivity($user['user_id'], 'LOGIN_SUCCESS', $ip_address);
+    Logger::info('User logged in successfully', [
+        'user_id' => $user['user_id'],
         'email' => $user['email'],
-        'name' => $user['first_name'] . ' ' . $user['last_name'],
-        'role' => $user['role']
-    ],
-    'redirect' => $redirect
-]);
+        'ip' => $ip_address
+    ]);
+    
+    // ============================================
+    // RESET RATE LIMITING
+    // ============================================
+    
+    // Reset rate limiter for this IP after successful login
+    RateLimiter::reset('login_attempts', $ip_address);
+    
+    // ============================================
+    // DETERMINE REDIRECT
+    // ============================================
+    
+    // Redirect based on role
+    $redirect = BASE_URL . 'frontend/employee_personalized_dashboard.html';
+    
+    if ($user['role'] === 'admin') {
+        $redirect = BASE_URL . 'frontend/admin_dashboard_overview.html';
+    } elseif ($user['role'] === 'manager') {
+        $redirect = BASE_URL . 'frontend/employee_list.html';
+    }
+    
+    // ============================================
+    // RESPONSE
+    // ============================================
+    
+    ApiResponse::success('Login successful! Redirecting...', [
+        'user' => [
+            'id' => $user['user_id'],
+            'email' => $user['email'],
+            'name' => $user['first_name'] . ' ' . $user['last_name'],
+            'role' => $user['role']
+        ],
+        'redirect' => $redirect,
+        'csrf_token' => CsrfProtection::getToken()
+    ]);
 
-$stmt->close();
+} catch (Exception $e) {
+    if ($e instanceof ApiException) {
+        $e->send();
+    } else {
+        Logger::critical('Login error', [
+            'error' => $e->getMessage(),
+            'file' => $e->getFile(),
+            'line' => $e->getLine()
+        ]);
+        ApiResponse::serverError('An error occurred during login');
+    }
+}
 ?>
