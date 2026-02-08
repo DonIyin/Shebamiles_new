@@ -136,7 +136,17 @@ const AuthModule = {
                 })
             });
 
-            const data = await response.json();
+            // Get the response text first to check if it's valid JSON
+            const responseText = await response.text();
+            
+            let data;
+            try {
+                data = JSON.parse(responseText);
+            } catch (jsonError) {
+                console.error('Invalid JSON response:', responseText);
+                this.showError('Server error: Invalid response. Please check server configuration.');
+                return;
+            }
 
             if (data.success) {
                 // Show success message
@@ -152,6 +162,7 @@ const AuthModule = {
                 this.showError(data.message || 'Registration failed');
             }
         } catch (error) {
+            console.error('Network error:', error);
             this.showError('Network error: ' + error.message);
         } finally {
             submitBtn.innerHTML = originalText;
