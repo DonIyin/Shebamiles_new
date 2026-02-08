@@ -228,7 +228,7 @@
 <script src="dashboard.js"></script>
 <script>
     // Access control: only employees can view this page
-    const user = JSON.parse(localStorage.getItem('shebamiles_user') || 'null');
+    const user = JSON.parse(localStorage.getItem('shebamiles_user') || sessionStorage.getItem('shebamiles_user') || 'null');
     if (!user) {
         window.location.href = 'index.html';
     } else if (user.role === 'admin') {
