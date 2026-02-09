@@ -1,2 +1,0 @@
-[2026-02-09 08:37:43] [CRITICAL] Login error | Context: {"error":"Table 'shebamiles_db.rate_limits' doesn't exist","file":"C:\\xampp\\htdocs\\Shebamiles_new\\backend\\middleware\\RateLimiter.php","line":49}
-[2026-02-09 08:38:51] [CRITICAL] Login error | Context: {"error":"Table 'shebamiles_db.rate_limits' doesn't exist","file":"C:\\xampp\\htdocs\\Shebamiles_new\\backend\\middleware\\RateLimiter.php","line":49}

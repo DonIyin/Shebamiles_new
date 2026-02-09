@@ -1,0 +1,25 @@
+# Log files
+/backend/logs/*.log
+
+# Environment configuration
+/backend/.env
+
+# System files
+.DS_Store
+*.swp
+*.swo
+*~
+
+# IDE files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Temporary files
+/tmp/
+*.tmp
+
+# Database backups
+*.sql.backup
+*.sql.gz

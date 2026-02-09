@@ -1,0 +1,32 @@
+# Prevent direct access to PHP files except entry points
+<FilesMatch "\.(php)$">
+    Order Deny,Allow
+    Deny from all
+</FilesMatch>
+
+# Allow specific entry points
+# Note: setup_database.php and run_migrations.php should be restricted to localhost in production
+<FilesMatch "^(login|register|logout|verify|health_check|.*_api)\.php$">
+    Allow from all
+</FilesMatch>
+
+# Administrative scripts - restrict to localhost only
+<FilesMatch "^(setup_database|run_migrations)\.php$">
+    Order Deny,Allow
+    Deny from all
+    Allow from 127.0.0.1
+    Allow from ::1
+</FilesMatch>
+
+# Protect sensitive files
+<FilesMatch "^(config|\.env|\.htaccess)">
+    Order Deny,Allow
+    Deny from all
+</FilesMatch>
+
+# Disable directory browsing
+Options -Indexes
+
+# Enable error handling
+php_flag display_errors off
+php_flag log_errors on

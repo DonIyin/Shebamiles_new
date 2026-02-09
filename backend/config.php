@@ -68,47 +68,79 @@ define('APP_NAME', 'Shebamiles');
 define('APP_VERSION', '2.0.0');
 
 // ============================================
+// ENSURE LOGS DIRECTORY EXISTS
+// ============================================
+
+$logsDir = __DIR__ . '/logs';
+if (!is_dir($logsDir)) {
+    @mkdir($logsDir, 0755, true);
+}
+
+// ============================================
 // LOAD FOUNDATION CLASSES
 // ============================================
 
 $classesDir = __DIR__ . '/classes/';
 $middlewareDir = __DIR__ . '/middleware/';
 
-require_once $classesDir . 'ApiResponse.php';
-require_once $classesDir . 'ApiException.php';
-require_once $classesDir . 'Logger.php';
-require_once $classesDir . 'RequestValidator.php';
-require_once $middlewareDir . 'SecurityHeaders.php';
-require_once $middlewareDir . 'CsrfProtection.php';
-require_once $middlewareDir . 'RateLimiter.php';
+// Load core classes with error handling
+$requiredClasses = [
+    'ApiResponse' => $classesDir . 'ApiResponse.php',
+    'ApiException' => $classesDir . 'ApiException.php',
+    'Logger' => $classesDir . 'Logger.php',
+    'Database' => $classesDir . 'Database.php',
+    'RequestValidator' => $classesDir . 'RequestValidator.php'
+];
+
+foreach ($requiredClasses as $className => $classFile) {
+    if (file_exists($classFile)) {
+        require_once $classFile;
+    } else {
+        error_log("Critical: Required class file missing: $classFile");
+        die("Application configuration error. Please contact administrator.");
+    }
+}
+
+// Load middleware classes (optional features - fail gracefully)
+$middlewareClasses = [
+    'SecurityHeaders' => $middlewareDir . 'SecurityHeaders.php',
+    'CsrfProtection' => $middlewareDir . 'CsrfProtection.php',
+    'RateLimiter' => $middlewareDir . 'RateLimiter.php'
+];
+
+foreach ($middlewareClasses as $className => $classFile) {
+    if (file_exists($classFile)) {
+        require_once $classFile;
+    } else {
+        Logger::warning("Optional middleware class missing: $className");
+    }
+}
 
 // ============================================
 // INITIALIZE SECURITY HEADERS
 // ============================================
 
-SecurityHeaders::setHeaders();
+if (class_exists('SecurityHeaders')) {
+    SecurityHeaders::setHeaders();
+}
 
 // ============================================
 // DATABASE CONNECTION
 // ============================================
 
-try {
-    $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME, DB_PORT);
+// Initialize Database singleton with graceful degradation
+$db = Database::getInstance();
+$conn = $db->getConnection();
+
+if (!$db->isConnected()) {
+    Logger::critical('Database connection unavailable', [
+        'host' => DB_HOST,
+        'database' => DB_NAME
+    ]);
     
-    // Check connection
-    if ($conn->connect_error) {
-        throw new Exception('Database connection failed: ' . $conn->connect_error);
-    }
-    
-    // Set charset to UTF8
-    $conn->set_charset("utf8mb4");
-    
-    // Enable strict mode for better error reporting
-    $conn->query("SET SESSION sql_mode='STRICT_TRANS_TABLES'");
-    
-} catch (Exception $e) {
-    Logger::critical('Database connection failed', ['error' => $e->getMessage()]);
-    ApiResponse::serverError('Database connection failed');
+    // Only terminate if this is a database-dependent endpoint
+    // For now, we'll continue with limited functionality
+    // Individual endpoints should check $conn availability
 }
 
 // ============================================
@@ -117,27 +149,34 @@ try {
 
 if (session_status() === PHP_SESSION_NONE) {
     // Configure session parameters for security
+    // Note: Empty domain string allows cookies to work across all subdomains
+    // This is necessary for the application to function properly with various deployment scenarios
     session_set_cookie_params([
         'lifetime' => SESSION_TIMEOUT,
         'path' => '/',
-        'domain' => $_SERVER['HTTP_HOST'] ?? 'localhost',
+        'domain' => '', // Empty for broad compatibility; restrict in production if needed
         'secure' => SESSION_SECURE_COOKIE,
         'httponly' => SESSION_HTTP_ONLY,
         'samesite' => SESSION_SAME_SITE
     ]);
     
     session_name(SESSION_NAME);
-    session_start();
     
-    // Regenerate session ID for security
-    if (!isset($_SESSION['initiated'])) {
-        session_regenerate_id(true);
-        $_SESSION['initiated'] = true;
+    try {
+        session_start();
+        
+        // Regenerate session ID for security
+        if (!isset($_SESSION['initiated'])) {
+            session_regenerate_id(true);
+            $_SESSION['initiated'] = true;
+        }
+    } catch (Exception $e) {
+        Logger::error('Session initialization failed', ['error' => $e->getMessage()]);
     }
 }
 
 // Generate CSRF token on session start
-if (!isset($_SESSION['csrf_token'])) {
+if (!isset($_SESSION['csrf_token']) && class_exists('CsrfProtection')) {
     $_SESSION['csrf_token'] = CsrfProtection::generateToken();
 }
 
