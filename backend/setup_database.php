@@ -136,6 +136,42 @@ if ($conn->query($sql) === TRUE) {
     echo "✗ Error creating login_attempts table: " . $conn->error . "<br>";
 }
 
+// Create rate_limits table (for rate limiting)
+$sql = "CREATE TABLE IF NOT EXISTS rate_limits (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    identifier VARCHAR(255) NOT NULL,
+    bucket VARCHAR(100) NOT NULL,
+    timestamp INT NOT NULL,
+    INDEX idx_identifier_bucket (identifier, bucket),
+    INDEX idx_timestamp (timestamp)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
+
+if ($conn->query($sql) === TRUE) {
+    echo "✓ Rate Limits table created successfully<br>";
+} else {
+    echo "✗ Error creating rate_limits table: " . $conn->error . "<br>";
+}
+
+// Create logs table (for application logging)
+$sql = "CREATE TABLE IF NOT EXISTS logs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    level VARCHAR(20) NOT NULL,
+    message TEXT NOT NULL,
+    context JSON,
+    user_id INT NULL,
+    ip_address VARCHAR(45),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_level (level),
+    INDEX idx_created_at (created_at),
+    INDEX idx_user_id (user_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
+
+if ($conn->query($sql) === TRUE) {
+    echo "✓ Logs table created successfully<br>";
+} else {
+    echo "✗ Error creating logs table: " . $conn->error . "<br>";
+}
+
 // Re-enable foreign key checks
 $conn->query("SET FOREIGN_KEY_CHECKS=1");
 

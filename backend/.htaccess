@@ -1,0 +1,23 @@
+# Prevent direct access to PHP files except entry points
+<FilesMatch "\.(php)$">
+    Order Deny,Allow
+    Deny from all
+</FilesMatch>
+
+# Allow specific entry points
+<FilesMatch "^(login|register|logout|verify|health_check|setup_database|run_migrations|.*_api)\.php$">
+    Allow from all
+</FilesMatch>
+
+# Protect sensitive files
+<FilesMatch "^(config|\.env|\.htaccess)">
+    Order Deny,Allow
+    Deny from all
+</FilesMatch>
+
+# Disable directory browsing
+Options -Indexes
+
+# Enable error handling
+php_flag display_errors off
+php_flag log_errors on

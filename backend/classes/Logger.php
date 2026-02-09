@@ -135,15 +135,34 @@ class Logger {
      * Write message to file with rotation
      */
     private static function writeToFile($filepath, $message) {
-        // Check file size for rotation
-        if (file_exists($filepath) && filesize($filepath) > self::$maxFileSize) {
-            $rotated = $filepath . '.' . time();
-            rename($filepath, $rotated);
+        try {
+            // Ensure log directory exists
+            $logDir = dirname($filepath);
+            if (!is_dir($logDir)) {
+                @mkdir($logDir, 0755, true);
+            }
+            
+            // Check if directory is writable
+            if (!is_writable($logDir)) {
+                error_log("Log directory not writable: $logDir");
+                return;
+            }
+            
+            // Check file size for rotation
+            if (file_exists($filepath) && filesize($filepath) > self::$maxFileSize) {
+                $rotated = $filepath . '.' . time();
+                @rename($filepath, $rotated);
+            }
+            
+            // Write message
+            $message .= PHP_EOL;
+            @error_log($message, 3, $filepath);
+            
+        } catch (Exception $e) {
+            // Fall back to system error log
+            error_log("Logger write failed: " . $e->getMessage());
+            error_log($message);
         }
-        
-        // Write message
-        $message .= PHP_EOL;
-        error_log($message, 3, $filepath);
     }
     
     /**
@@ -173,14 +192,15 @@ class Logger {
             $query = "INSERT INTO logs (level, message, context, user_id, ip_address, created_at) 
                      VALUES (?, ?, ?, ?, ?, NOW())";
             
-            $stmt = $conn->prepare($query);
+            $stmt = @$conn->prepare($query);
             if ($stmt) {
-                $stmt->bind_param('sssus', $level, $message, $context_json, $user_id, $ip_address);
-                $stmt->execute();
+                $stmt->bind_param('sssis', $level, $message, $context_json, $user_id, $ip_address);
+                @$stmt->execute();
                 $stmt->close();
             }
         } catch (Exception $e) {
             // Fail silently to prevent infinite loops
+            // Fall back to file logging only
         }
     }
     
