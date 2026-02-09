@@ -122,8 +122,15 @@ $configCheck['details']['session_started'] = session_status() === PHP_SESSION_AC
 
 $health['checks']['configuration'] = $configCheck;
 
-// Set overall status code
-http_response_code($health['status'] === 'healthy' ? 200 : ($health['status'] === 'degraded' ? 200 : 503));
+// Set overall status code based on health status
+$statusCode = 200; // Default: OK
+if ($health['status'] === 'unhealthy') {
+    $statusCode = 503; // Service Unavailable
+} elseif ($health['status'] === 'degraded') {
+    $statusCode = 200; // Still OK but with warnings
+}
+
+http_response_code($statusCode);
 
 echo json_encode($health, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 ?>

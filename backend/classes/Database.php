@@ -79,8 +79,18 @@ class Database {
             $this->connectionAttempts++;
             
             try {
-                // Suppress connection errors
-                $this->connection = @new mysqli(
+                // Initialize mysqli
+                $mysqli = mysqli_init();
+                
+                if (!$mysqli) {
+                    throw new Exception('mysqli_init failed');
+                }
+                
+                // Set connection timeout before connecting
+                $mysqli->options(MYSQLI_OPT_CONNECT_TIMEOUT, 10);
+                
+                // Connect to database
+                $result = @$mysqli->real_connect(
                     DB_HOST,
                     DB_USER,
                     DB_PASS,
@@ -89,14 +99,15 @@ class Database {
                 );
                 
                 // Check for connection errors
-                if ($this->connection->connect_error) {
-                    throw new Exception($this->connection->connect_error);
+                if (!$result) {
+                    throw new Exception($mysqli->connect_error ?? 'Connection failed');
                 }
+                
+                $this->connection = $mysqli;
                 
                 // Configure connection
                 $this->connection->set_charset("utf8mb4");
                 $this->connection->query("SET SESSION sql_mode='STRICT_TRANS_TABLES'");
-                $this->connection->options(MYSQLI_OPT_CONNECT_TIMEOUT, 10);
                 
                 $this->isConnected = true;
                 

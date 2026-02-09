@@ -149,10 +149,12 @@ if (!$db->isConnected()) {
 
 if (session_status() === PHP_SESSION_NONE) {
     // Configure session parameters for security
+    // Note: Empty domain string allows cookies to work across all subdomains
+    // This is necessary for the application to function properly with various deployment scenarios
     session_set_cookie_params([
         'lifetime' => SESSION_TIMEOUT,
         'path' => '/',
-        'domain' => '', // Empty string works for all domains/subdomains
+        'domain' => '', // Empty for broad compatibility; restrict in production if needed
         'secure' => SESSION_SECURE_COOKIE,
         'httponly' => SESSION_HTTP_ONLY,
         'samesite' => SESSION_SAME_SITE

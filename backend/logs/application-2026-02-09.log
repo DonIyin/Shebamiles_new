@@ -15,3 +15,14 @@
 [2026-02-09 09:51:02] [INFO] User activity | Context: {"user_id":11,"activity":"SIGNUP","details":"User registered successfully","ip_address":"::1"}
 [2026-02-09 09:51:18] [INFO] User activity | Context: {"user_id":11,"activity":"LOGIN_SUCCESS","details":"::1","ip_address":"::1"}
 [2026-02-09 09:51:18] [INFO] User logged in successfully | Context: {"user_id":11,"email":"tomiwaorija@gmail.com","ip":"::1"}
+[2026-02-09 09:11:10] [WARNING] Database connection attempt failed | Context: {"attempt":1,"max_retries":3,"error":"No such file or directory"}
+[2026-02-09 09:11:11] [WARNING] Database connection attempt failed | Context: {"attempt":2,"max_retries":3,"error":"No such file or directory"}
+[2026-02-09 09:11:13] [WARNING] Database connection attempt failed | Context: {"attempt":3,"max_retries":3,"error":"No such file or directory"}
+[2026-02-09 09:11:42] [WARNING] Database connection attempt failed | Context: {"attempt":1,"max_retries":3,"error":"No such file or directory"}
+[2026-02-09 09:11:43] [WARNING] Database connection attempt failed | Context: {"attempt":2,"max_retries":3,"error":"No such file or directory"}
+[2026-02-09 09:11:45] [WARNING] Database connection attempt failed | Context: {"attempt":3,"max_retries":3,"error":"No such file or directory"}
+[2026-02-09 09:11:56] [INFO] Test info message | Context: {"test":"value"}
+[2026-02-09 09:11:56] [WARNING] Test warning message
+[2026-02-09 09:13:39] [WARNING] Database connection attempt failed | Context: {"attempt":1,"max_retries":3,"error":"No such file or directory"}
+[2026-02-09 09:13:40] [WARNING] Database connection attempt failed | Context: {"attempt":2,"max_retries":3,"error":"No such file or directory"}
+[2026-02-09 09:13:42] [WARNING] Database connection attempt failed | Context: {"attempt":3,"max_retries":3,"error":"No such file or directory"}

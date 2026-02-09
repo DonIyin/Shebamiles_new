@@ -53,18 +53,47 @@ return [
     },
     
     'down' => function($conn) {
-        $queries = [
-            "ALTER TABLE user_activity DROP INDEX IF EXISTS idx_timestamp",
-            "ALTER TABLE user_activity DROP INDEX IF EXISTS idx_user_timestamp",
-            "ALTER TABLE login_attempts DROP INDEX IF EXISTS idx_attempt_time",
-            "ALTER TABLE users DROP INDEX IF EXISTS idx_last_login",
-            "ALTER TABLE employees DROP INDEX IF EXISTS idx_dept_status"
-        ];
+        $queries = [];
+        
+        // Check MySQL version for DROP INDEX IF EXISTS support (MySQL 5.7.6+)
+        $versionResult = $conn->query("SELECT VERSION() as version");
+        $versionRow = $versionResult->fetch_assoc();
+        $version = $versionRow['version'];
+        $supportsDropIfExists = version_compare($version, '5.7.6', '>=');
+        
+        // Drop indexes with appropriate syntax
+        if ($supportsDropIfExists) {
+            $queries = [
+                "ALTER TABLE user_activity DROP INDEX IF EXISTS idx_timestamp",
+                "ALTER TABLE user_activity DROP INDEX IF EXISTS idx_user_timestamp",
+                "ALTER TABLE login_attempts DROP INDEX IF EXISTS idx_attempt_time",
+                "ALTER TABLE users DROP INDEX IF EXISTS idx_last_login",
+                "ALTER TABLE employees DROP INDEX IF EXISTS idx_dept_status"
+            ];
+        } else {
+            // For older MySQL versions, check if index exists before dropping
+            $indexes = [
+                ['table' => 'user_activity', 'index' => 'idx_timestamp'],
+                ['table' => 'user_activity', 'index' => 'idx_user_timestamp'],
+                ['table' => 'login_attempts', 'index' => 'idx_attempt_time'],
+                ['table' => 'users', 'index' => 'idx_last_login'],
+                ['table' => 'employees', 'index' => 'idx_dept_status']
+            ];
+            
+            foreach ($indexes as $indexInfo) {
+                $result = $conn->query("SHOW INDEX FROM {$indexInfo['table']} WHERE Key_name = '{$indexInfo['index']}'");
+                if ($result && $result->num_rows > 0) {
+                    $queries[] = "ALTER TABLE {$indexInfo['table']} DROP INDEX {$indexInfo['index']}";
+                }
+            }
+        }
         
         $results = [];
         foreach ($queries as $query) {
-            // Ignore errors on DROP INDEX IF EXISTS as older MySQL versions don't support it
-            $result = @$conn->query($query);
+            $result = $conn->query($query);
+            if ($result === false) {
+                throw new Exception("Rollback failed: " . $conn->error);
+            }
             $results[] = $result;
         }
         

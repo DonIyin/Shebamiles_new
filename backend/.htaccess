@@ -5,8 +5,17 @@
 </FilesMatch>
 
 # Allow specific entry points
-<FilesMatch "^(login|register|logout|verify|health_check|setup_database|run_migrations|.*_api)\.php$">
+# Note: setup_database.php and run_migrations.php should be restricted to localhost in production
+<FilesMatch "^(login|register|logout|verify|health_check|.*_api)\.php$">
     Allow from all
+</FilesMatch>
+
+# Administrative scripts - restrict to localhost only
+<FilesMatch "^(setup_database|run_migrations)\.php$">
+    Order Deny,Allow
+    Deny from all
+    Allow from 127.0.0.1
+    Allow from ::1
 </FilesMatch>
 
 # Protect sensitive files

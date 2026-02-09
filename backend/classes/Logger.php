@@ -194,7 +194,7 @@ class Logger {
             
             $stmt = @$conn->prepare($query);
             if ($stmt) {
-                $stmt->bind_param('sssis', $level, $message, $context_json, $user_id, $ip_address);
+                $stmt->bind_param('sssss', $level, $message, $context_json, $user_id, $ip_address);
                 @$stmt->execute();
                 $stmt->close();
             }

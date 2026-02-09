@@ -2,3 +2,9 @@
 [2026-02-08 23:58:01] [CRITICAL] Login error | Context: {"error":"Table 'shebamiles_db.rate_limits' doesn't exist","file":"C:\\xampp\\htdocs\\Shebamiles_new\\backend\\middleware\\RateLimiter.php","line":49}
 [2026-02-09 08:37:43] [CRITICAL] Login error | Context: {"error":"Table 'shebamiles_db.rate_limits' doesn't exist","file":"C:\\xampp\\htdocs\\Shebamiles_new\\backend\\middleware\\RateLimiter.php","line":49}
 [2026-02-09 08:38:51] [CRITICAL] Login error | Context: {"error":"Table 'shebamiles_db.rate_limits' doesn't exist","file":"C:\\xampp\\htdocs\\Shebamiles_new\\backend\\middleware\\RateLimiter.php","line":49}
+[2026-02-09 09:11:13] [CRITICAL] Database connection failed after all retries | Context: {"attempts":3,"host":"localhost","database":"shebamiles_db"}
+[2026-02-09 09:11:13] [CRITICAL] Database connection unavailable | Context: {"host":"localhost","database":"shebamiles_db"}
+[2026-02-09 09:11:45] [CRITICAL] Database connection failed after all retries | Context: {"attempts":3,"host":"localhost","database":"shebamiles_db"}
+[2026-02-09 09:11:45] [CRITICAL] Database connection unavailable | Context: {"host":"localhost","database":"shebamiles_db"}
+[2026-02-09 09:13:42] [CRITICAL] Database connection failed after all retries | Context: {"attempts":3,"host":"localhost","database":"shebamiles_db"}
+[2026-02-09 09:13:42] [CRITICAL] Database connection unavailable | Context: {"host":"localhost","database":"shebamiles_db"}
