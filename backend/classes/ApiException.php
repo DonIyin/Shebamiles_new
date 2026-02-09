@@ -6,7 +6,7 @@
 
 class ApiException extends Exception {
     
-    protected $code = ApiResponse::ERROR;
+    protected $errorCode = ApiResponse::ERROR;
     protected $statusCode = 400;
     protected $errors = [];
     
@@ -16,15 +16,15 @@ class ApiException extends Exception {
         $statusCode = 400,
         $errors = []
     ) {
-        $this->code = $code;
+        $this->errorCode = $code;
         $this->statusCode = $statusCode;
         $this->errors = $errors;
         
         parent::__construct($message);
     }
     
-    public function getCode() {
-        return $this->code;
+    public function getErrorCode() {
+        return $this->errorCode;
     }
     
     public function getStatusCode() {
@@ -42,7 +42,7 @@ class ApiException extends Exception {
         if (!empty($this->errors)) {
             ApiResponse::validationError($this->message, $this->errors);
         } else {
-            ApiResponse::error($this->message, $this->code, $this->statusCode);
+            ApiResponse::error($this->message, $this->errorCode, $this->statusCode);
         }
     }
 }

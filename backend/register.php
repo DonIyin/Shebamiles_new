@@ -3,7 +3,32 @@
  * Shebamiles - User Registration Handler
  */
 
-header('Content-Type: application/json');
+// Ensure JSON output no matter what happens
+header('Content-Type: application/json; charset=utf-8');
+
+// Set error handler to ensure JSON output on fatal errors
+set_error_handler(function($errno, $errstr, $errfile, $errline) {
+    http_response_code(500);
+    echo json_encode([
+        'success' => false,
+        'message' => 'An error occurred',
+        'error' => $errstr,
+        'file' => $errfile,
+        'line' => $errline
+    ]);
+    exit;
+});
+
+// Set exception handler to ensure JSON output
+set_exception_handler(function($exception) {
+    http_response_code(500);
+    echo json_encode([
+        'success' => false,
+        'message' => 'An error occurred',
+        'error' => $exception->getMessage()
+    ]);
+    exit;
+});
 
 require_once 'config.php';
 
@@ -91,12 +116,9 @@ if ($result->num_rows > 0) {
 // Hash password
 $password_hash = hashPassword($password);
 
-// Create verification token
-$verification_token = bin2hex(random_bytes(32));
-
-// Insert user
-$query = "INSERT INTO users (email, username, password, first_name, last_name, phone, department, verification_token, role, status) 
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+// Insert user (auto-verified for demo)
+$query = "INSERT INTO users (email, username, password, first_name, last_name, phone, department, role, status, is_verified) 
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1)";
 $stmt = $conn->prepare($query);
 
 if (!$stmt) {
@@ -108,7 +130,7 @@ if (!$stmt) {
 $role = 'employee';
 $status = 'active';
 
-$stmt->bind_param('ssssssssss', $email, $username, $password_hash, $first_name, $last_name, $phone, $department, $verification_token, $role, $status);
+$stmt->bind_param('sssssssss', $email, $username, $password_hash, $first_name, $last_name, $phone, $department, $role, $status);
 
 if ($stmt->execute()) {
     $user_id = $stmt->insert_id;
@@ -116,26 +138,7 @@ if ($stmt->execute()) {
     // Log the activity
     logActivity($user_id, 'SIGNUP', 'User registered successfully');
     
-    // Send verification email (optional)
-    $verification_link = BASE_URL . 'backend/verify.php?token=' . $verification_token;
-    $subject = 'Verify Your Shebamiles Account';
-    $message = "
-        <html>
-        <body style='font-family: Arial, sans-serif;'>
-            <h2>Welcome to Shebamiles!</h2>
-            <p>Hi {$first_name},</p>
-            <p>Thank you for registering with Shebamiles Employment Management System.</p>
-            <p>Please verify your email address by clicking the link below:</p>
-            <p><a href='{$verification_link}' style='background-color: #f97316; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;'>Verify Email</a></p>
-            <p>Or copy this link: {$verification_link}</p>
-            <p>This link will expire in 24 hours.</p>
-            <p>Best regards,<br>Shebamiles Team</p>
-        </body>
-        </html>
-    ";
-    
-    // Send email (optional - comment out if email not configured)
-    // sendEmail($email, $subject, $message);
+    // Email verification disabled for demo project
     
     // Auto-login after registration (optional)
     $_SESSION['user_id'] = $user_id;

@@ -8,6 +8,33 @@
  * - Activity logging
  */
 
+// Ensure JSON output no matter what happens
+header('Content-Type: application/json; charset=utf-8');
+
+// Set error handler to ensure JSON output on fatal errors
+set_error_handler(function($errno, $errstr, $errfile, $errline) {
+    http_response_code(500);
+    echo json_encode([
+        'success' => false,
+        'message' => 'An error occurred',
+        'error' => $errstr,
+        'file' => $errfile,
+        'line' => $errline
+    ]);
+    exit;
+});
+
+// Set exception handler to ensure JSON output
+set_exception_handler(function($exception) {
+    http_response_code(500);
+    echo json_encode([
+        'success' => false,
+        'message' => 'An error occurred',
+        'error' => $exception->getMessage()
+    ]);
+    exit;
+});
+
 require_once 'config.php';
 
 try {
@@ -100,14 +127,7 @@ try {
         throw new ForbiddenException('Your account is ' . $user['status'] . '. Please contact support.');
     }
     
-    // Check if email is verified (optional step)
-    if (!$user['is_verified']) {
-        Logger::info('Login attempt with unverified account', [
-            'user_id' => $user['user_id']
-        ]);
-        
-        throw new ForbiddenException('Please verify your email before logging in');
-    }
+    // Email verification disabled for demo project
     
     // ============================================
     // PASSWORD VERIFICATION
@@ -175,13 +195,13 @@ try {
     // DETERMINE REDIRECT
     // ============================================
     
-    // Redirect based on role
-    $redirect = BASE_URL . 'frontend/employee_personalized_dashboard.html';
+    // Redirect based on role (using relative paths from frontend folder)
+    $redirect = 'employee_personalized_dashboard_1.html';
     
     if ($user['role'] === 'admin') {
-        $redirect = BASE_URL . 'frontend/admin_dashboard_overview.html';
+        $redirect = 'admin_dashboard_overview.html';
     } elseif ($user['role'] === 'manager') {
-        $redirect = BASE_URL . 'frontend/employee_list.html';
+        $redirect = 'employee_list.html';
     }
     
     // ============================================

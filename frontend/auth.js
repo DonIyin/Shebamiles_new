@@ -65,24 +65,35 @@ const AuthModule = {
                 })
             });
 
-            const data = await response.json();
+            // Get response as text first to check if it's valid JSON
+            const responseText = await response.text();
+            
+            let data;
+            try {
+                data = JSON.parse(responseText);
+            } catch (jsonError) {
+                console.error('Invalid JSON response from login:', responseText);
+                this.showError('Server error: Invalid response. Please try again.');
+                return;
+            }
 
             if (data.success) {
                 // Store user data (persist if "remember me" is checked)
                 const storage = remember ? localStorage : sessionStorage;
-                storage.setItem('shebamiles_user', JSON.stringify(data.user));
+                storage.setItem('shebamiles_user', JSON.stringify(data.data.user));
                 
                 // Show success message
                 this.showSuccess('Login successful! Redirecting...');
                 
                 // Redirect after short delay
                 setTimeout(() => {
-                    window.location.href = data.redirect;
+                    window.location.href = data.data.redirect;
                 }, 1000);
             } else {
                 this.showError(data.message || 'Login failed');
             }
         } catch (error) {
+            console.error('Login error:', error);
             this.showError('Network error: ' + error.message);
         } finally {
             submitBtn.innerHTML = originalText;
